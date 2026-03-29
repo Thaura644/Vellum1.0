@@ -15,7 +15,8 @@ import {
   Type, 
   MessageSquare, Edit3, 
   BookOpen, Layers, Users, MapPin, StickyNote,
-  Search, Bell, Settings, FileText, ChevronDown
+  Search, Bell, Settings, FileText, ChevronDown,
+  Camera, MoreHorizontal, ChevronsRight
 } from "lucide-react";
 
 import { useMemo } from "react";
@@ -96,10 +97,10 @@ const EditorWorkspace = () => {
             SmartType.configure({
                 suggestion: {
                     items: ({ query }: any) => {
-                        if (!editor) return [];
-                        const characters = ["ELARA", "SARAH", "ELIAS", "DRIVER", "OFFICER"];
-                        const locations = ["INT. APARTMENT", "EXT. STREET", "INT. DATA VAULT", "EXT. NEON DOWNTOWN"];
-                        return [...characters, ...locations].filter(item => 
+                        // Will be populated dynamically from project metadata as
+                        // the user creates characters and locations.
+                        const definitions: string[] = [];
+                        return definitions.filter(item =>
                             item.toLowerCase().startsWith(query.toLowerCase())
                         ).slice(0, 5);
                     }
@@ -190,8 +191,23 @@ const EditorWorkspace = () => {
                     </div>
                 </div>
             </header>
+            
+            {/* Top Formatting Toolbar (WriterDuet Style) */}
+            <div className="fixed top-16 w-full z-40 bg-[#1a1a1b] border-b border-vellum-outline/5 h-16 flex justify-start md:justify-center items-center gap-1 md:gap-2 px-4 shadow-xl">
+                <ToolbarButton icon={<Layers size={18} />} label="Scene" onClick={() => editor?.chain().focus().setNode('sceneHeading').run()} active={editor?.isActive('sceneHeading')} />
+                <ToolbarButton icon={<Type size={18} />} label="Action" onClick={() => editor?.chain().focus().setNode('action').run()} active={editor?.isActive('action')} />
+                <ToolbarButton icon={<Users size={18} />} label="Character" onClick={() => editor?.chain().focus().setNode('character').run()} active={editor?.isActive('character')} />
+                <ToolbarButton icon={<MoreHorizontal size={18} />} label="Parens" onClick={() => editor?.chain().focus().setNode('parenthetical').run()} active={editor?.isActive('parenthetical')} />
+                <ToolbarButton icon={<MessageSquare size={18} />} label="Dialogue" onClick={() => editor?.chain().focus().setNode('dialogue').run()} active={editor?.isActive('dialogue')} />
+                <ToolbarButton icon={<ChevronsRight size={18} />} label="Transition" onClick={() => editor?.chain().focus().setNode('transition').run()} active={editor?.isActive('transition')} />
+                <ToolbarButton icon={<Camera size={18} />} label="Shot" onClick={() => editor?.chain().focus().setNode('shot').run()} active={editor?.isActive('shot')} />
+                
+                <div className="w-px h-8 bg-vellum-outline/20 mx-4 hidden md:block" />
+                <ToolbarButton icon={<FileText size={18} />} label="Text" onClick={() => editor?.chain().focus().setParagraph().run()} active={editor?.isActive('paragraph')} />
+                <ToolbarButton icon={<StickyNote size={18} />} label="Note" onClick={() => { setRightSidebarOpen(true); setRightSidebarTab("notes"); }} active={rightSidebarOpen && rightSidebarTab === 'notes'} />
+            </div>
 
-            <div className="flex flex-1 pt-16">
+            <div className="flex flex-1 pt-[128px]">
                 {/* Left Sidebar (Navigator) */}
                 <aside className={`w-64 bg-surface-container-low border-r border-vellum-outline/10 flex flex-col transition-all overflow-hidden ${leftSidebarOpen ? 'ml-0' : '-ml-64'}`}>
                     <div className="p-6 border-b border-vellum-outline/5 mb-4">
@@ -202,11 +218,10 @@ const EditorWorkspace = () => {
                         <p className="text-[10px] text-vellum-on-surface-variant font-bold uppercase tracking-widest opacity-60">5 Scenes • 12 Pages</p>
                     </div>
                     <div className="flex-1 overflow-y-auto px-4 space-y-1 py-1 transform duration-300">
-                        <NavItem icon={<FileText size={16}/>} label="Scene 1: Data Vault" active />
-                        <NavItem icon={<FileText size={16}/>} label="Scene 2: Neon Alley" />
-                        <NavItem icon={<Users size={16}/>} label="Characters" />
-                        <NavItem icon={<MapPin size={16}/>} label="Locations" />
-                        <NavItem icon={<StickyNote size={16}/>} label="Scene Notes" />
+                        <div className="p-5 bg-surface-container-highest border border-dashed border-vellum-outline/10 rounded-2xl text-center mt-4 mx-2">
+                            <p className="text-[10px] text-vellum-primary font-bold uppercase tracking-widest mb-2">Outline Empty</p>
+                            <p className="text-xs text-vellum-on-surface-variant font-medium leading-relaxed">Scenes will automatically appear here as you write.</p>
+                        </div>
                     </div>
                     <div className="p-6 mt-auto">
                         <button onClick={exportPDF} className="w-full bg-vellum-primary text-on-primary rounded-xl py-3 font-label font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-vellum-primary/10">
@@ -276,44 +291,26 @@ const EditorWorkspace = () => {
                             </section>
                         )}
                     </div>
-                </aside>
+            {/* Right Panel (Multi-Tab) */}
             </div>
 
-            {/* Floating Focus Toolbar */}
-            <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-6">
-                <div className="bg-surface-bright/80 backdrop-blur-2xl rounded-full px-8 py-4 flex items-center gap-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] border border-white/10 ring-1 ring-white/5">
-                    <button 
-                        onClick={() => setLeftSidebarOpen(!leftSidebarOpen)}
-                        className={`transition-colors p-2 rounded-full ${leftSidebarOpen ? 'text-vellum-primary' : 'text-vellum-on-surface-variant hover:text-vellum-primary'}`}
-                    >
-                        <BookOpen size={20} />
-                    </button>
-                    <div className="w-px h-6 bg-vellum-outline/20" />
-                    <button className="text-vellum-on-surface-variant hover:text-vellum-primary transition-colors flex items-center gap-3 active:scale-95">
-                        <Edit3 size={18} />
-                        <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Write</span>
-                    </button>
-                    <div className="w-px h-6 bg-vellum-outline/20" />
-                    <div className="flex gap-8">
-                        <button onClick={() => editor?.chain().focus().setNode("sceneHeading").run()} className="text-vellum-on-surface-variant hover:text-vellum-primary transition-all font-bold text-[10px] uppercase tracking-widest">SCN</button>
-                        <button onClick={() => editor?.chain().focus().setNode("character").run()} className="text-vellum-on-surface-variant hover:text-vellum-primary transition-all font-bold text-[10px] uppercase tracking-widest">CHR</button>
-                        <button onClick={() => editor?.chain().focus().setNode("dialogue").run()} className="text-vellum-on-surface-variant hover:text-vellum-primary transition-all font-bold text-[10px] uppercase tracking-widest">DIA</button>
-                    </div>
-                    <div className="w-px h-6 bg-vellum-outline/20" />
-                    <button 
-                         onClick={() => setRightSidebarOpen(!rightSidebarOpen)}
-                         className={`transition-colors p-2 rounded-full ${rightSidebarOpen ? 'text-vellum-primary' : 'text-vellum-on-surface-variant hover:text-vellum-primary'}`}
-                    >
-                        <MessageSquare size={20} />
-                    </button>
-                </div>
-                
-                <button 
-                    onClick={() => setTypewriterMode(!typewriterMode)}
-                    className={`p-4 rounded-full glass-panel shadow-2xl transition-all ${typewriterMode ? 'bg-vellum-primary text-on-primary' : 'text-vellum-on-surface-variant hover:text-vellum-primary border border-white/5'}`}
-                >
-                    <Type size={20} />
-                </button>
+            {/* Bottom floating toggles */}
+            <div className="fixed bottom-8 left-8 flex gap-4 z-50">
+               <button 
+                  onClick={() => setLeftSidebarOpen(!leftSidebarOpen)}
+                  className={`p-3 rounded-full glass-panel shadow-xl transition-all ${leftSidebarOpen ? 'bg-vellum-primary/20 text-vellum-primary border border-vellum-primary/30' : 'bg-surface-container-high/80 text-vellum-on-surface-variant hover:text-on-surface border border-white/5'}`}
+               >
+                  <BookOpen size={18} />
+               </button>
+            </div>
+            
+            <div className="fixed bottom-8 right-8 flex gap-4 z-50">
+               <button 
+                  onClick={() => setRightSidebarOpen(!rightSidebarOpen)}
+                  className={`p-3 rounded-full glass-panel shadow-xl transition-all ${rightSidebarOpen ? 'bg-vellum-primary/20 text-vellum-primary border border-vellum-primary/30' : 'bg-surface-container-high/80 text-vellum-on-surface-variant hover:text-on-surface border border-white/5'}`}
+               >
+                  <MessageSquare size={18} />
+               </button>
             </div>
 
             {/* Status Indicator */}
@@ -324,6 +321,16 @@ const EditorWorkspace = () => {
         </div>
     );
 };
+
+const ToolbarButton = ({ icon, label, active, onClick }: any) => (
+    <button 
+        onClick={onClick} 
+        className={`flex flex-col items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl transition-colors min-w-[70px] ${active ? 'bg-vellum-primary/10 text-vellum-primary' : 'text-vellum-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'}`}
+    >
+        {icon}
+        <span className="text-[8px] font-bold uppercase tracking-[0.15em] opacity-80">{label}</span>
+    </button>
+);
 
 const NavItem = ({ icon, label, active = false }: any) => (
   <button className={`w-full text-left font-label rounded-xl px-4 py-2.5 flex items-center gap-3 transition-all active:scale-95 duration-100 ${active ? 'bg-surface-container-highest text-vellum-primary border border-vellum-primary/10 pl-5' : 'text-vellum-on-surface-variant hover:bg-surface-container-highest/50 hover:text-on-surface'}`}>

@@ -10,9 +10,16 @@ datasource db {
 model Project {
   id        String   @id @default(cuid())
   title     String   @default("Untitled Script")
-  content   Bytes
+  excerpt   String   @default("A new storytelling masterpiece.")
+  type      String   @default("Feature")
+  progress  Int      @default(0)
+  archived  Boolean  @default(false)
+  words     Int      @default(0)
+  content   Bytes?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -21,5 +28,7 @@ model User {
   password  String
   name      String
   color     String   @default("#ffb612")
+  goal      Int      @default(2000)
   createdAt DateTime @default(now())
+  projects  Project[]
 }

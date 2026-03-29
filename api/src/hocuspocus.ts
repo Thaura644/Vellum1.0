@@ -23,10 +23,9 @@ export const hocusPocusServer = new Hocuspocus({
       store: async ({ documentName, state }) => {
         try {
            const binaryState = Buffer.from(state);
-           await prisma.project.upsert({
+           await prisma.project.update({
              where: { id: documentName },
-             update: { content: binaryState },
-             create: { id: documentName, title: "Untitled Script", content: binaryState }
+             data: { content: binaryState }
            });
         } catch (error) {
            console.error("Error storing document:", error);

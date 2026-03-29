@@ -16,6 +16,11 @@ const Dashboard = () => {
   const [newType, setNewType] = useState("Feature");
   const [newExcerpt, setNewExcerpt] = useState("");
   
+  // Profile Mutability State
+  const [mutableGoal, setMutableGoal] = useState<number>(2000);
+  const [mutableName, setMutableName] = useState<string>("");
+  const [mutableColor, setMutableColor] = useState<string>("#ffb612");
+  
   const { logout } = useAuthStore();
   const navigate = useNavigate();
 
@@ -61,7 +66,13 @@ const Dashboard = () => {
         const res = await fetch("http://localhost:3001/api/auth/me", {
             headers: { Authorization: `Bearer ${token}` }
         });
-        if (res.ok) setProfile(await res.json());
+        if (res.ok) {
+            const data = await res.json();
+            setProfile(data);
+            setMutableGoal(data.goal || 2000);
+            setMutableName(data.name || "Writer");
+            setMutableColor(data.color || "#ffb612");
+        }
       } catch (err) {
         console.error("Failed to load profile", err);
       }
@@ -70,6 +81,27 @@ const Dashboard = () => {
     fetchProfile();
     fetchProjects();
   }, []);
+
+  const updateProfile = async () => {
+      try {
+          const token = useAuthStore.getState().token;
+          const res = await fetch("http://localhost:3001/api/auth/me", {
+              method: "PATCH",
+              headers: { 
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}` 
+              },
+              body: JSON.stringify({ name: mutableName, goal: mutableGoal, color: mutableColor })
+          });
+          if (res.ok) {
+              const data = await res.json();
+              setProfile(data);
+              setActiveModal(null);
+          }
+      } catch (err) {
+          console.error("Failed to update profile", err);
+      }
+  };
 
   const createNewProject = async () => {
       try {
@@ -367,19 +399,23 @@ const Dashboard = () => {
                 <div className="flex items-center gap-4 mb-8">
                     <div className="w-16 h-16 rounded-full bg-surface-container-highest border border-vellum-primary/30 flex items-center justify-center text-xl font-bold">{profile?.name?.charAt(0) || "U"}</div>
                     <div>
-                        <h2 className="text-2xl font-headline font-bold">{profile?.name || "User"}</h2>
-                        <p className="text-sm text-vellum-on-surface-variant font-medium">{profile?.email}</p>
+                        <input value={mutableName} onChange={e => setMutableName(e.target.value)} className="text-2xl font-headline font-bold bg-transparent border-b border-vellum-outline/20 focus:border-vellum-primary outline-none text-vellum-on-surface w-full" placeholder="Your Name" />
+                        <p className="text-sm text-vellum-on-surface-variant font-medium mt-1">{profile?.email}</p>
                     </div>
                 </div>
                 <div className="space-y-4">
-                    <div><label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Target Daily Goal (Words)</label><div className="bg-surface-container p-4 rounded-xl mt-2 font-bold">{dailyGoal.toLocaleString()} words</div></div>
+                    <div>
+                        <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Target Daily Goal (Words)</label>
+                        <input type="number" value={mutableGoal} onChange={e => setMutableGoal(parseInt(e.target.value) || 0)} className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface font-bold" />
+                    </div>
                     <div><label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Account Color Identity</label>
                         <div className="flex gap-2 mt-2">
                             {['#ffb612', '#ef4444', '#3b82f6', '#10b981', '#a855f7'].map(c => (
-                                <div key={c} className={`w-8 h-8 rounded-full border-2 ${profile?.color === c ? 'border-vellum-on-surface' : 'border-transparent'} cursor-pointer`} style={{ backgroundColor: c }} />
+                                <div key={c} onClick={() => setMutableColor(c)} className={`w-8 h-8 rounded-full border-2 ${mutableColor === c ? 'border-vellum-on-surface-variant' : 'border-transparent'} cursor-pointer transition-all hover:scale-110`} style={{ backgroundColor: c }} />
                             ))}
                         </div>
                     </div>
+                    <button onClick={updateProfile} className="w-full mt-6 bg-vellum-primary text-on-primary font-bold uppercase py-3 rounded-xl tracking-widest text-xs hover:brightness-110 shadow-lg active:scale-95 transition-all">Save Changes</button>
                 </div>
             </motion.div>
         </div>

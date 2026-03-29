@@ -74,4 +74,52 @@ router.post("/login", async (req, res): Promise<any> => {
   }
 });
 
+// Middleware to parse JWT for protected routes here
+const authenticateToken = (req: any, res: any, next: any) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
+};
+
+// GET current user profile
+router.get("/me", authenticateToken, async (req: any, res: any): Promise<any> => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: req.user.id },
+            select: { id: true, name: true, email: true, color: true, goal: true, createdAt: true }
+        });
+        if (!user) return res.status(404).json({ error: "User not found." });
+        res.status(200).json(user);
+    } catch (error) {
+        console.error("Fetch user error:", error);
+        res.status(500).json({ error: "Internal server error." });
+    }
+});
+
+// PATCH current user profile
+router.patch("/me", authenticateToken, async (req: any, res: any): Promise<any> => {
+    try {
+        const { name, color, goal } = req.body;
+        const user = await prisma.user.update({
+            where: { id: req.user.id },
+            data: {
+                ...(name !== undefined && { name }),
+                ...(color !== undefined && { color }),
+                ...(goal !== undefined && { goal })
+            },
+            select: { id: true, name: true, email: true, color: true, goal: true }
+        });
+        res.status(200).json(user);
+    } catch (error) {
+        console.error("Update user error:", error);
+        res.status(500).json({ error: "Internal server error." });
+    }
+});
+
 export default router;
