@@ -15,7 +15,7 @@ import {
   Type, 
   MessageSquare, Edit3, 
   BookOpen, Layers, Users, MapPin, StickyNote,
-  Search, Bell, Settings, FileText
+  Search, Bell, Settings, FileText, ChevronDown
 } from "lucide-react";
 
 import { useMemo } from "react";
@@ -31,6 +31,8 @@ const EditorWorkspace = () => {
     const [leftSidebarOpen, setLeftSidebarOpen] = useState(true);
     const [rightSidebarTab, setRightSidebarTab] = useState<"revisions" | "characters" | "locations" | "notes">("revisions");
     const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
+    const [fontFamily, setFontFamily] = useState<string>("Courier Prime, Courier, monospace");
+    const [fontSize, setFontSize] = useState<string>("12pt");
 
     useEffect(() => {
         const docId = _id || "vellum-doc";
@@ -129,6 +131,35 @@ const EditorWorkspace = () => {
                 </div>
                 
                 <div className="flex items-center gap-6">
+                    <div className="hidden lg:flex items-center gap-4 border-r border-vellum-outline/10 pr-6 mr-2">
+                        <div className="relative flex items-center bg-surface-container-lowest border border-vellum-outline/20 rounded-full px-3 py-1.5 focus-within:border-vellum-primary/40 transition-colors">
+                            <Type size={14} className="text-vellum-on-surface-variant mr-1" />
+                            <select 
+                                value={fontFamily}
+                                onChange={(e) => setFontFamily(e.target.value)}
+                                className="appearance-none bg-transparent outline-none border-none focus:ring-0 text-[11px] font-bold text-on-surface uppercase tracking-widest cursor-pointer pr-6 pl-2"
+                            >
+                                <option value="Courier Prime, Courier, monospace">Courier (Script)</option>
+                                <option value="Inter, sans-serif">Inter (Modern)</option>
+                                <option value="Merriweather, Georgia, serif">Merriweather (Novel)</option>
+                            </select>
+                            <ChevronDown size={14} className="text-vellum-on-surface-variant absolute right-3 pointer-events-none" />
+                        </div>
+                        <div className="relative flex items-center bg-surface-container-lowest border border-vellum-outline/20 rounded-full px-2 py-1.5 w-20 focus-within:border-vellum-primary/40 transition-colors">
+                            <select 
+                                value={fontSize}
+                                onChange={(e) => setFontSize(e.target.value)}
+                                className="appearance-none bg-transparent outline-none border-none focus:ring-0 text-[11px] font-bold text-on-surface uppercase tracking-widest cursor-pointer w-full text-center"
+                            >
+                                <option value="10pt">10pt</option>
+                                <option value="12pt">12pt</option>
+                                <option value="14pt">14pt</option>
+                                <option value="16pt">16pt</option>
+                            </select>
+                            <ChevronDown size={14} className="text-vellum-on-surface-variant absolute right-2 pointer-events-none" />
+                        </div>
+                    </div>
+
                     <div className="hidden md:flex items-center bg-surface-container-lowest px-4 py-1.5 rounded-full border border-vellum-outline/20">
                         <Search size={14} className="text-vellum-on-surface-variant" />
                         <input className="bg-transparent border-none focus:ring-0 text-xs w-48 text-on-surface ml-2" placeholder="Search manuscript..." type="text"/>
@@ -170,7 +201,8 @@ const EditorWorkspace = () => {
                 <main className={`flex-1 overflow-y-auto bg-surface-container-lowest no-scrollbar scroll-smooth transition-all ${typewriterMode ? 'pt-64' : 'pt-20'} pb-64`}>
                     <div className="flex flex-col items-center min-h-screen relative">
                         {/* Page Container */}
-                        <div className="relative">
+                        <div className="relative" style={{ fontFamily, fontSize }}>
+                            <div className="absolute -left-12 top-0 h-full w-px bg-vellum-outline/10 hidden lg:block" />
                             <EditorContent editor={editor} className="script-shadow transition-all duration-300 rounded-sm" />
                         </div>
                     </div>
