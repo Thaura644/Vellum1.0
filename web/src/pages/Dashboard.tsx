@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Plus, Bell, Settings, FileText, TrendingUp, History, HelpCircle, Archive, PlusCircle, X, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,11 +17,44 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  const [scripts] = useState([
-    { id: "1", title: "Neon Shadows", excerpt: "A tech-noir thriller set in a future where memories can be traded as currency.", progress: 64, type: "Feature" },
-    { id: "2", title: "The Gilded Cage", excerpt: "Historical drama centering on the secret lives of 19th-century debutantes.", progress: 12, type: "Pilot" },
-    { id: "3", title: "Quiet Hours", excerpt: "A minimalist horror script set entirely within a soundproof recording studio.", progress: 90, type: "Short" },
-  ]);
+  const [scripts, setScripts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const token = useAuthStore.getState().token;
+        const res = await fetch("http://localhost:3001/api/projects", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            setScripts(data);
+        }
+      } catch (err) {
+        console.error("Failed to load projects", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  const createNewProject = async () => {
+      try {
+          const token = useAuthStore.getState().token;
+          const res = await fetch("http://localhost:3001/api/projects/new", {
+              method: "POST",
+              headers: { Authorization: `Bearer ${token}` }
+          });
+          if (res.ok) {
+              const data = await res.json();
+              navigate(`/editor/${data.id}`);
+          }
+      } catch (err) {
+          console.error("Failed to create project", err);
+      }
+  };
 
   return (
     <div className="min-h-screen bg-vellum-background text-vellum-on-surface font-body selection:bg-vellum-primary/30 flex">
@@ -48,9 +81,9 @@ const Dashboard = () => {
         </div>
 
         <div className="mt-auto p-6 space-y-4">
-           <button onClick={() => alert("Please open a script to export PDFs.")} className="w-full bg-vellum-primary text-on-primary rounded-xl py-3 font-label font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-vellum-primary/10">
-              Export PDF
-           </button>
+               <button onClick={createNewProject} className="flex items-center gap-3 bg-vellum-primary text-on-primary px-8 py-3.5 rounded-full font-label font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-vellum-primary/20 cursor-pointer">
+                  <Plus size={16} /> <span>Start New Project</span>
+               </button>
            <div className="space-y-1">
               <NavItem icon={<HelpCircle size={18} />} label="Help" onClick={() => alert("Loading Vellum Documentation...")} />
               <NavItem icon={<Archive size={18} />} label="Archive" onClick={() => setActiveModal("archive")} />
@@ -98,7 +131,16 @@ const Dashboard = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {scripts.map(script => (
+              {loading ? (
+                <div className="col-span-2 text-center text-vellum-on-surface-variant text-xs font-bold uppercase tracking-widest py-10">Loading your manuscripts...</div>
+              ) : scripts.length === 0 ? (
+                <div className="col-span-2 bg-surface-container-low border border-dashed border-vellum-outline/20 rounded-3xl p-12 text-center">
+                    <p className="text-vellum-on-surface-variant font-medium mb-6">You haven't crafted any stories yet.</p>
+                    <button onClick={createNewProject} className="inline-flex items-center gap-3 bg-surface-container-high px-6 py-3 rounded-full font-label font-bold text-xs uppercase tracking-widest hover:bg-surface-container-highest transition-colors">
+                        <Plus size={16} /> Start Writing
+                    </button>
+                </div>
+              ) : scripts.map(script => (
                 <Link to={`/editor/${script.id}`} key={script.id}>
                   <motion.div 
                     whileHover={{ y: -5 }}
