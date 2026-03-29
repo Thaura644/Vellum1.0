@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Plus, Bell, Settings, FileText, TrendingUp, History, HelpCircle, Archive, PlusCircle, X, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "../components/ThemeToggle";
+import { WalkthroughModal } from "../components/WalkthroughModal";
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState<"scripts" | "library" | "community" | "dashboard">("scripts");
@@ -16,6 +17,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-vellum-background text-vellum-on-surface font-body selection:bg-vellum-primary/30 flex">
+      <WalkthroughModal />
       {/* Sidebar */}
       <aside className="w-64 fixed left-0 top-0 h-full bg-surface-container-low border-r border-vellum-outline/10 flex flex-col z-40">
         <div className="p-8">

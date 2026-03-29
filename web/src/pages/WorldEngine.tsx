@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { ChevronLeft, Plus, Globe, MapPin, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
 
 const WorldEngine = () => {
     return (
