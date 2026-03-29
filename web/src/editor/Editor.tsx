@@ -13,7 +13,7 @@ import ThemeToggle from "../components/ThemeToggle";
 import { useAuthStore } from "../store/useAuthStore";
 import { 
   Type, 
-  MessageSquare, History, Edit3, 
+  MessageSquare, Edit3, 
   BookOpen, Layers, Users, MapPin, StickyNote,
   Search, Bell, Settings, FileText
 } from "lucide-react";
@@ -30,8 +30,6 @@ const Editor = () => {
     const [rightSidebarTab, setRightSidebarTab] = useState<"revisions" | "characters" | "locations" | "notes">("revisions");
     const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
 
-    const [provider, setProvider] = useState<HocuspocusProvider | null>(null);
-
     useEffect(() => {
         const docId = _id || "vellum-doc";
         
@@ -47,8 +45,6 @@ const Editor = () => {
             if (status === "connecting") setStatus("Connecting...");
             if (status === "disconnected") setStatus("Offline");
         });
-
-        setProvider(newProvider);
 
         return () => {
             newProvider.disconnect();
