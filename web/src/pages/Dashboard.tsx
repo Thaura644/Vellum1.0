@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Plus, Bell, Settings, FileText, TrendingUp, History, HelpCircle, Archive, PlusCircle, X, User } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "../components/ThemeToggle";
 import { WalkthroughModal } from "../components/WalkthroughModal";
@@ -9,6 +10,12 @@ import { useAuthStore } from "../store/useAuthStore";
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState<"scripts" | "library" | "community" | "dashboard">("scripts");
   const [activeModal, setActiveModal] = useState<"newProject" | "settings" | "profile" | "notifications" | "archive" | "history" | null>(null);
+  
+  // New Project Wizard State
+  const [newTitle, setNewTitle] = useState("");
+  const [newType, setNewType] = useState("Feature");
+  const [newExcerpt, setNewExcerpt] = useState("");
+  
   const { logout } = useAuthStore();
   const navigate = useNavigate();
 
@@ -23,6 +30,13 @@ const Dashboard = () => {
 
   const totalWords = scripts.reduce((acc, s) => acc + (s.words || 0), 0);
   const dailyGoal = profile?.goal || 2000;
+  
+  // Filter active scripts (opened/edited in last 7 days)
+  const activeScriptsCount = scripts.filter(s => new Date(s.updatedAt) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length;
+  
+  // Natively compute velocity against the user's real total words for today
+  const todaysVelocity = Math.min(100, Math.floor((totalWords / Math.max(1, dailyGoal)) * 100));
+  const velocityData = [0, 0, 0, 0, 0, 0, todaysVelocity];
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -62,10 +76,19 @@ const Dashboard = () => {
           const token = useAuthStore.getState().token;
           const res = await fetch("http://localhost:3001/api/projects/new", {
               method: "POST",
-              headers: { Authorization: `Bearer ${token}` }
+              headers: { 
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}` 
+              },
+              body: JSON.stringify({
+                  title: newTitle || "Untitled Project",
+                  type: newType || "Feature",
+                  excerpt: newExcerpt || "A brilliant new narrative."
+              })
           });
           if (res.ok) {
               const data = await res.json();
+              setActiveModal(null);
               navigate(`/editor/${data.id}`);
           }
       } catch (err) {
@@ -97,7 +120,7 @@ const Dashboard = () => {
         </div>
 
         <div className="mt-auto p-6 space-y-4">
-               <button onClick={createNewProject} className="flex items-center gap-3 bg-vellum-primary text-on-primary px-8 py-3.5 rounded-full font-label font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-vellum-primary/20 cursor-pointer">
+               <button onClick={() => setActiveModal("newProject")} className="flex items-center gap-3 bg-vellum-primary text-on-primary px-8 py-3.5 rounded-full font-label font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-vellum-primary/20 cursor-pointer">
                   <Plus size={16} /> <span>Start New Project</span>
                </button>
            <div className="space-y-1">
@@ -118,7 +141,7 @@ const Dashboard = () => {
         <header className="flex justify-between items-end mb-16">
           <div className="space-y-2">
             <h1 className="font-headline text-5xl font-extrabold tracking-tight">Writer's Dashboard</h1>
-            <p className="text-vellum-on-surface-variant font-medium">Welcome back, <span className="text-vellum-primary">{profile?.name || "Writer"}</span>. You have {scripts.length} active manuscripts.</p>
+            <p className="text-vellum-on-surface-variant font-medium">Welcome back, <span className="text-vellum-primary">{profile?.name || "Writer"}</span>. You have {activeScriptsCount} active manuscripts.</p>
           </div>
           <div className="flex gap-4 items-center">
              <ThemeToggle />
@@ -152,7 +175,7 @@ const Dashboard = () => {
               ) : scripts.length === 0 ? (
                 <div className="col-span-2 bg-surface-container-low border border-dashed border-vellum-outline/20 rounded-3xl p-12 text-center">
                     <p className="text-vellum-on-surface-variant font-medium mb-6">You haven't crafted any stories yet.</p>
-                    <button onClick={createNewProject} className="inline-flex items-center gap-3 bg-surface-container-high px-6 py-3 rounded-full font-label font-bold text-xs uppercase tracking-widest hover:bg-surface-container-highest transition-colors">
+                    <button onClick={() => setActiveModal("newProject")} className="inline-flex items-center gap-3 bg-surface-container-high px-6 py-3 rounded-full font-label font-bold text-xs uppercase tracking-widest hover:bg-surface-container-highest transition-colors">
                         <Plus size={16} /> Start Writing
                     </button>
                 </div>
@@ -165,7 +188,9 @@ const Dashboard = () => {
                     <div className="absolute top-0 left-0 w-1 h-full bg-vellum-primary opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="flex justify-between items-start mb-8">
                        <span className="bg-vellum-primary/10 text-vellum-primary text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-widest">{script.type}</span>
-                       <span className="text-vellum-on-surface-variant text-[10px] font-bold uppercase tracking-widest">2h ago</span>
+                       <span className="text-vellum-on-surface-variant text-[10px] font-bold uppercase tracking-widest">
+                           {script.updatedAt ? formatDistanceToNow(new Date(script.updatedAt), { addSuffix: true }) : 'Just now'}
+                       </span>
                     </div>
                     <h3 className="font-headline text-3xl font-bold mb-4">{script.title}</h3>
                     <p className="text-vellum-on-surface-variant text-sm mb-10 leading-relaxed font-medium">
@@ -206,12 +231,12 @@ const Dashboard = () => {
                   Writing Velocity
                </h3>
                <div className="flex items-end gap-3 h-40 mb-8 px-2">
-                  {[40, 65, 30, 85, 95, 70, 20].map((h, i) => (
+                  {velocityData.map((h, i) => (
                     <motion.div 
                       key={i}
                       initial={{ height: 0 }}
                       animate={{ height: `${h}%` }}
-                      className={`flex-1 rounded-t-lg ${h > 80 ? 'bg-vellum-primary' : 'bg-surface-container-highest'}`} 
+                      className={`flex-1 rounded-t-lg ${h > 0 ? (h > 80 ? 'bg-vellum-primary' : 'bg-surface-container-highest') : 'bg-surface-container border-b-2 border-vellum-outline/10'}`} 
                     />
                   ))}
                </div>
@@ -298,7 +323,7 @@ const Dashboard = () => {
                 </div>
                 <div className="flex flex-col gap-4">
                    <p className="text-vellum-on-surface-variant text-sm">
-                      {activeModal === "newProject" && "Start fresh with a blank page or select an industry-standard template (e.g., Feature, Hour-Drama, Half-Hour Comedy)."}
+                      {activeModal === "newProject" && "Define the architecture of your next great narrative below to properly initialize your environment."}
                       {activeModal === "settings" && "Configure application theme, PDF export defaults, and cloud synching settings."}
                       {activeModal === "profile" && "Update your pen name, email address, and WGA registry information."}
                       {activeModal === "notifications" && "You have 2 new comments on 'Quiet Hours' from your co-writer."}
@@ -306,9 +331,28 @@ const Dashboard = () => {
                       {activeModal === "history" && "Detailed breakdown of all edits, saves, and character adjustments over the past 30 days."}
                    </p>
                    {activeModal === "newProject" && (
-                       <button onClick={() => { setActiveModal(null); window.location.href="/editor/new"; }} className="mt-4 bg-vellum-primary text-on-primary font-bold uppercase py-3 rounded-xl tracking-widest text-xs hover:brightness-110 shadow-lg">
-                           Initialize Script
-                       </button>
+                       <div className="space-y-4 mt-4 text-left">
+                           <div>
+                               <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Manuscript Title</label>
+                               <input value={newTitle} onChange={e => setNewTitle(e.target.value)} type="text" placeholder="e.g. Neon Shadows" className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface" />
+                           </div>
+                           <div>
+                               <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Format Template</label>
+                               <select value={newType} onChange={e => setNewType(e.target.value)} className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface">
+                                   <option value="Feature">Feature Screenplay</option>
+                                   <option value="TV Pilot">TV Pilot (One-Hour)</option>
+                                   <option value="Sitcom">Sitcom (Half-Hour)</option>
+                                   <option value="Novel">Novel / Prose</option>
+                               </select>
+                           </div>
+                           <div>
+                               <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Logline / Notes</label>
+                               <input value={newExcerpt} onChange={e => setNewExcerpt(e.target.value)} type="text" placeholder="A brief summary..." className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface" />
+                           </div>
+                           <button onClick={createNewProject} className="w-full mt-4 bg-vellum-primary text-on-primary font-bold uppercase py-3 rounded-xl tracking-widest text-xs hover:brightness-110 shadow-lg">
+                               Initialize Script
+                           </button>
+                       </div>
                    )}
                 </div>
              </motion.div>

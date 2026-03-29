@@ -33,8 +33,24 @@ const EditorWorkspace = () => {
     const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
     const [fontFamily, setFontFamily] = useState<string>("Courier Prime, Courier, monospace");
     const [fontSize, setFontSize] = useState<string>("12pt");
+    const [project, setProject] = useState<any>(null);
 
     useEffect(() => {
+        if (!_id) return;
+        
+        // Fetch specific Project Metadata
+        const fetchProjectDetails = async () => {
+            try {
+                const res = await fetch(`http://localhost:3001/api/projects/${_id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                if (res.ok) setProject(await res.json());
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchProjectDetails();
+
         const docId = _id || "vellum-doc";
         
         const newProvider = new HocuspocusProvider({
@@ -127,7 +143,9 @@ const EditorWorkspace = () => {
                 <div className="flex items-center gap-6">
                     <Link to="/dashboard" className="text-2xl font-headline font-extrabold tracking-tighter text-vellum-primary">Vellum</Link>
                     <div className="h-4 w-px bg-vellum-outline/20" />
-                    <h2 className="text-xs font-bold uppercase tracking-widest text-vellum-on-surface/60">Neon Shadows • Draft 4</h2>
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-vellum-on-surface/60">
+                        {project ? `${project.title} • ${project.type}` : 'Loading Metadata...'}
+                    </h2>
                 </div>
                 
                 <div className="flex items-center gap-6">
@@ -230,61 +248,30 @@ const EditorWorkspace = () => {
 
                     <div className="flex-1 overflow-y-auto p-8 space-y-10 no-scrollbar">
                         {rightSidebarTab === "revisions" && (
-                            <>
-                                <section>
-                                    <div className="flex items-center gap-4 mb-6">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-vellum-primary shadow-[0_0_10px_rgba(173,198,255,0.4)]" />
-                                        <div>
-                                            <p className="text-xs font-bold text-on-surface font-label">V1.2 Final Polish</p>
-                                            <p className="text-[10px] text-vellum-on-surface-variant font-bold uppercase tracking-widest opacity-60">Today, 2:45 PM by You</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-4 opacity-40">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-vellum-outline" />
-                                        <div>
-                                            <p className="text-xs font-bold text-on-surface font-label">V1.1 Character Update</p>
-                                            <p className="text-[10px] text-vellum-on-surface-variant font-bold uppercase tracking-widest opacity-60">Yesterday, 11:20 AM</p>
-                                        </div>
-                                    </div>
-                                </section>
-                            </>
+                            <section>
+                                <div className="bg-surface-container border border-dashed border-vellum-outline/20 rounded-xl p-8 text-center mt-4">
+                                    <p className="text-xs text-vellum-on-surface-variant font-medium">No history recorded yet. Keep typing to generate snapshots!</p>
+                                </div>
+                            </section>
                         )}
                         {rightSidebarTab === "characters" && (
-                            <section className="space-y-4">
-                                <h3 className="font-headline font-bold text-xs tracking-[0.2em] text-on-surface uppercase opacity-80 mb-6">Active Characters</h3>
-                                <div className="p-4 bg-surface-container rounded-xl border border-vellum-outline/5">
-                                    <h4 className="font-bold text-sm text-vellum-primary">ELARA (28)</h4>
-                                    <p className="text-xs text-vellum-on-surface-variant mt-2 leading-relaxed">A disillusioned hacker trying to clear her name. Fast-talking, cynical.</p>
-                                </div>
-                                <div className="p-4 bg-surface-container rounded-xl border border-vellum-outline/5">
-                                    <h4 className="font-bold text-sm text-on-surface">DR. SILAS (50s)</h4>
-                                    <p className="text-xs text-vellum-on-surface-variant mt-2 leading-relaxed">The architect of the Data Vault. Meticulous, paranoid.</p>
+                            <section>
+                                <div className="bg-surface-container border border-dashed border-vellum-outline/20 rounded-xl p-8 text-center mt-4">
+                                    <p className="text-xs text-vellum-on-surface-variant font-medium">No characters tracked. They will appear here.</p>
                                 </div>
                             </section>
                         )}
                         {rightSidebarTab === "locations" && (
-                            <section className="space-y-4">
-                                <h3 className="font-headline font-bold text-xs tracking-[0.2em] text-on-surface uppercase opacity-80 mb-6">Scene Locations</h3>
-                                <div className="p-4 bg-surface-container rounded-xl border border-vellum-outline/5">
-                                    <h4 className="font-bold text-sm text-vellum-primary">INT. DATA VAULT</h4>
-                                    <p className="text-xs text-vellum-on-surface-variant mt-2 leading-relaxed">Cold, clinical, softly illuminated by server racks. High security.</p>
+                            <section>
+                                <div className="bg-surface-container border border-dashed border-vellum-outline/20 rounded-xl p-8 text-center mt-4">
+                                    <p className="text-xs text-vellum-on-surface-variant font-medium">No locations pinned.</p>
                                 </div>
                             </section>
                         )}
                         {rightSidebarTab === "notes" && (
-                            <section className="space-y-6">
-                                <h3 className="font-headline font-bold text-xs tracking-[0.2em] text-on-surface uppercase opacity-80 mb-6">Scene Notes</h3>
-                                <div className="bg-tertiary-container/30 border-l-4 border-tertiary p-5 rounded-xl">
-                                    <p className="text-[10px] text-tertiary font-bold uppercase tracking-widest mb-2">Creative Spark</p>
-                                    <p className="text-sm text-on-surface leading-relaxed italic font-medium opacity-90">
-                                        "Maybe the rain shouldn't start until Elias finds the locket. Heighten the tension with silence."
-                                    </p>
-                                </div>
-                                <div className="bg-surface-container-highest/40 p-5 rounded-xl border border-vellum-outline/5">
-                                    <p className="text-[10px] text-vellum-on-surface-variant font-bold uppercase tracking-widest mb-2">Continuity</p>
-                                    <p className="text-sm text-on-surface leading-relaxed font-medium">
-                                        Check if Sarah's coat was already wet in the previous scene at the bus stop.
-                                    </p>
+                            <section>
+                                <div className="bg-surface-container border border-dashed border-vellum-outline/20 rounded-xl p-8 text-center mt-4">
+                                    <p className="text-xs text-vellum-on-surface-variant font-medium">Attach scene notes to keep track of brilliant ideas.</p>
                                 </div>
                             </section>
                         )}
