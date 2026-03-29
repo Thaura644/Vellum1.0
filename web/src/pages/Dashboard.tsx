@@ -18,7 +18,11 @@ const Dashboard = () => {
   };
 
   const [scripts, setScripts] = useState<any[]>([]);
+  const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  const totalWords = scripts.reduce((acc, s) => acc + (s.words || 0), 0);
+  const dailyGoal = profile?.goal || 2000;
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -37,6 +41,19 @@ const Dashboard = () => {
         setLoading(false);
       }
     };
+    const fetchProfile = async () => {
+      try {
+        const token = useAuthStore.getState().token;
+        const res = await fetch("http://localhost:3001/api/auth/me", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) setProfile(await res.json());
+      } catch (err) {
+        console.error("Failed to load profile", err);
+      }
+    };
+    
+    fetchProfile();
     fetchProjects();
   }, []);
 
@@ -73,8 +90,7 @@ const Dashboard = () => {
           </div>
 
           <nav className="space-y-1.5">
-            <NavItem icon={<History size={18} />} label="Dashboard" active={currentView === "dashboard"} onClick={() => setCurrentView("dashboard")} />
-            <NavItem icon={<FileText size={18} />} label="Scripts" active={currentView === "scripts"} onClick={() => setCurrentView("scripts")} />
+            <NavItem icon={<History size={18} />} label="Dashboard" active={currentView === "dashboard" || currentView as any === "scripts"} onClick={() => setCurrentView("dashboard")} />
             <NavItem icon={<TrendingUp size={18} />} label="Library" active={currentView === "library"} onClick={() => setCurrentView("library")} />
             <NavItem icon={<PlusCircle size={18} />} label="Community" active={currentView === "community"} onClick={() => setCurrentView("community")} />
           </nav>
@@ -102,7 +118,7 @@ const Dashboard = () => {
         <header className="flex justify-between items-end mb-16">
           <div className="space-y-2">
             <h1 className="font-headline text-5xl font-extrabold tracking-tight">Writer's Dashboard</h1>
-            <p className="text-vellum-on-surface-variant font-medium">Welcome back. You have 3 active manuscripts this week.</p>
+            <p className="text-vellum-on-surface-variant font-medium">Welcome back, <span className="text-vellum-primary">{profile?.name || "Writer"}</span>. You have {scripts.length} active manuscripts.</p>
           </div>
           <div className="flex gap-4 items-center">
              <ThemeToggle />
@@ -112,7 +128,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                    <div className="text-[10px] uppercase tracking-widest text-vellum-on-surface-variant font-label font-bold">Daily Goal</div>
-                   <div className="font-headline font-bold text-xl leading-tight">1,240 / 2,000 <span className="text-xs font-normal text-vellum-on-surface-variant">words</span></div>
+                   <div className="font-headline font-bold text-xl leading-tight">{totalWords.toLocaleString()} / {dailyGoal.toLocaleString()} <span className="text-xs font-normal text-vellum-on-surface-variant">words</span></div>
                 </div>
              </div>
              <button onClick={() => setActiveModal("profile")} className="w-12 h-12 ml-4 rounded-full bg-surface-container overflow-hidden border border-vellum-primary/20 flex items-center justify-center text-xs font-bold text-vellum-on-surface-variant hover:border-vellum-primary transition-colors focus:ring-2 focus:ring-vellum-primary/40">
@@ -299,6 +315,45 @@ const Dashboard = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Profile Modal */}
+      {activeModal === "profile" && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-surface-container-low p-8 rounded-3xl w-full max-w-md relative border border-vellum-outline/10 shadow-2xl">
+                <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-vellum-on-surface-variant hover:text-vellum-primary"><X size={20}/></button>
+                <div className="flex items-center gap-4 mb-8">
+                    <div className="w-16 h-16 rounded-full bg-surface-container-highest border border-vellum-primary/30 flex items-center justify-center text-xl font-bold">{profile?.name?.charAt(0) || "U"}</div>
+                    <div>
+                        <h2 className="text-2xl font-headline font-bold">{profile?.name || "User"}</h2>
+                        <p className="text-sm text-vellum-on-surface-variant font-medium">{profile?.email}</p>
+                    </div>
+                </div>
+                <div className="space-y-4">
+                    <div><label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Target Daily Goal (Words)</label><div className="bg-surface-container p-4 rounded-xl mt-2 font-bold">{dailyGoal.toLocaleString()} words</div></div>
+                    <div><label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Account Color Identity</label>
+                        <div className="flex gap-2 mt-2">
+                            {['#ffb612', '#ef4444', '#3b82f6', '#10b981', '#a855f7'].map(c => (
+                                <div key={c} className={`w-8 h-8 rounded-full border-2 ${profile?.color === c ? 'border-vellum-on-surface' : 'border-transparent'} cursor-pointer`} style={{ backgroundColor: c }} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+        </div>
+      )}
+      
+      {/* Archive Modal */}
+      {activeModal === "archive" && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-surface-container-low p-8 rounded-3xl w-full max-w-lg relative border border-vellum-outline/10 shadow-2xl">
+                <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-vellum-on-surface-variant hover:text-vellum-primary"><X size={20}/></button>
+                <h2 className="text-2xl font-headline font-bold mb-2">Archived Projects</h2>
+                <p className="text-xs text-vellum-on-surface-variant font-medium mb-8">Projects here are hidden from your main dashboard but can be safely restored at any time.</p>
+                <div className="bg-surface-container-highest border border-dashed border-vellum-outline/20 rounded-2xl p-12 text-center text-sm text-vellum-on-surface-variant font-medium">
+                    No archived projects found.
+                </div>
+            </motion.div>
+        </div>
+      )}
     </div>
   );
 };
