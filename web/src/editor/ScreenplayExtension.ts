@@ -1,4 +1,4 @@
-import { Node, mergeAttributes, nodeInputRule } from "@tiptap/core";
+import { Node, Extension, mergeAttributes, nodeInputRule } from "@tiptap/core";
 // import { Plugin, PluginKey } from "@tiptap/pm/state";
 
 export const ScreenplayExtension = Node.create({
@@ -130,7 +130,7 @@ export const Shot = Node.create({
 });
 
 // Main extension to handle keyboard logic
-export const ScreenplayShortcuts = Node.create({
+export const ScreenplayShortcuts = Extension.create({
   name: "screenplayShortcuts",
   addKeyboardShortcuts() {
     return {

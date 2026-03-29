@@ -1,5 +1,8 @@
 import { Extension } from "@tiptap/core";
 import Suggestion from "@tiptap/suggestion";
+import { PluginKey } from "@tiptap/pm/state";
+
+const SmartTypePluginKey = new PluginKey("smartType");
 
 export const SmartType = Extension.create({
   name: "smartType",
@@ -7,17 +10,20 @@ export const SmartType = Extension.create({
   addOptions() {
     return {
       suggestion: {
-        char: "", // Triggered on any text in specific nodes
-        allowSpaces: true,
-        startOfLine: true,
-        pluginKey: "smartType",
+        char: "/", // Using a standard trigger for now to debug
+        pluginKey: SmartTypePluginKey,
         command: ({ editor, range, props }: any) => {
           editor.chain().focus().insertContentAt(range, props.id).run();
         },
-        items: ({ query }: { query: string }) => {
-          // The actual filtering happens in the Editor configuration
-          return [query]; // Minimal use to satisfy lint
+        items: ({ query: _query }: { query: string }) => {
+          return [];
         },
+        render: () => ({
+          onStart: () => {},
+          onUpdate: () => {},
+          onKeyDown: () => false,
+          onExit: () => {},
+        }),
       },
     };
   },
