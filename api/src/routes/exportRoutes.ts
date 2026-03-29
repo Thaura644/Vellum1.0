@@ -1,47 +1,82 @@
-import { Router } from "express";
-import type { Request, Response } from "express";
-import { generatePDF } from "../services/exportService";
+import express from "express";
+import puppeteer from "puppeteer";
 
-const router = Router();
+const router = express.Router();
 
-router.post("/pdf", async (req: Request, res: Response) => {
+router.post("/pdf", async (req, res): Promise<any> => {
+  let browser = null;
   try {
-    const { html, title } = req.body;
-
-    if (!html) {
-      return res.status(400).json({ error: "HTML content is required" });
+    const { content } = req.body;
+    
+    if (!content) {
+      return res.status(400).json({ error: "Missing document content." });
     }
 
-    // Wrap the provided HTML with basic styling for PDF rendering
-    const fullHtml = `
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    });
+
+    const page = await browser.newPage();
+
+    // The frontend passes raw TipTap HTML. We wrap it in standard screenplay margins and fonts.
+    const htmlTemplate = `
       <!DOCTYPE html>
       <html>
-      <head>
-        <style>
-          @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
-          body { font-family: 'Courier Prime', monospace; font-size: 12pt; line-height: 1.2; }
-          div[data-type="sceneHeading"] { text-transform: uppercase; font-weight: bold; margin-top: 1rem; }
-          div[data-type="character"] { text-transform: uppercase; margin-left: 2in; margin-top: 1rem; }
-          div[data-type="dialogue"] { margin-left: 1in; margin-right: 1.5in; }
-          div[data-type="parenthetical"] { margin-left: 1.5in; margin-right: 2in; font-style: italic; }
-          div[data-type="action"] { margin-top: 1rem; }
-          div[data-type="transition"] { text-transform: uppercase; text-align: right; margin-top: 1rem; }
-        </style>
-      </head>
-      <body>
-        ${html}
-      </body>
+        <head>
+          <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+          <style>
+            @page {
+              size: letter;
+              margin: 1in 1in 1in 1.5in;
+            }
+            body {
+              font-family: 'Courier Prime', Courier, monospace;
+              font-size: 12pt;
+              line-height: 1.0;
+              color: black;
+              background: white;
+            }
+            p { margin: 0; padding: 0; }
+            h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: normal; font-size: 12pt; }
+            
+            /* Screenplay Standard Indentations (relative to left margin) */
+            .scene-heading { text-transform: uppercase; margin-top: 24pt; margin-bottom: 12pt; font-weight: bold; }
+            .action { margin-top: 12pt; margin-bottom: 12pt; }
+            .character { text-transform: uppercase; margin-left: 170pt; margin-top: 16pt; margin-bottom: 0; }
+            .dialogue { margin-left: 90pt; margin-right: 90pt; margin-top: 0; margin-bottom: 12pt; }
+            .parenthetical { margin-left: 130pt; margin-right: 130pt; margin-top: 0; margin-bottom: 0; }
+            .transition { text-transform: uppercase; text-align: right; margin-right: 0; margin-top: 16pt; margin-bottom: 12pt; }
+            .shot { text-transform: uppercase; margin-top: 24pt; margin-bottom: 12pt; }
+          </style>
+        </head>
+        <body>
+          <div class="screenplay-content">
+            ${content}
+          </div>
+        </body>
       </html>
     `;
 
-    const pdfBuffer = await generatePDF(fullHtml);
+    await page.setContent(htmlTemplate, { waitUntil: "networkidle0" });
 
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `attachment; filename="${title || "script"}.pdf"`);
+    const pdfBuffer = await page.pdf({
+      format: "Letter",
+      printBackground: true,
+      displayHeaderFooter: true,
+      headerTemplate: "<div></div>",
+      footerTemplate: "<div style='font-family: \"Courier Prime\", monospace; font-size: 10pt; width: 100%; text-align: right; padding-right: 1in;'><span class='pageNumber'></span></div>"
+    });
+
+    res.contentType("application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=\"script.pdf\"");
     res.send(pdfBuffer);
+
   } catch (error) {
-    console.error("PDF Export Error:", error);
+    console.error("PDF Export failed:", error);
     res.status(500).json({ error: "Failed to generate PDF" });
+  } finally {
+    if (browser) await browser.close();
   }
 });
 
