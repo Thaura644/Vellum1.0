@@ -52,4 +52,3 @@ export const hocusPocusServer = new Hocuspocus({
     }
   }
 });
-

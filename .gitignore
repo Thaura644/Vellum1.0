@@ -1,0 +1,10 @@
+node_modules/
+.DS_Store
+*.log
+*.png
+dist/
+api/node_modules/
+web/node_modules/
+api/dev.db*
+web/playwright-verify.cjs
+/home/jules/verification/
