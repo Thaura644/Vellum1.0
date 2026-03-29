@@ -18,11 +18,13 @@ import {
   Search, Bell, Settings, FileText
 } from "lucide-react";
 
-// Setup Yjs
-const ydoc = new Y.Doc();
+import { useMemo } from "react";
 
-const Editor = () => {
+const EditorWorkspace = () => {
     const { id: _id } = useParams();
+    
+    // Create a fresh Y.Doc for this specific document render
+    const ydoc = useMemo(() => new Y.Doc(), [_id]);
     const { token } = useAuthStore();
     const [status, setStatus] = useState("Offline");
     const [typewriterMode, setTypewriterMode] = useState(false);
@@ -311,4 +313,9 @@ const NavItem = ({ icon, label, active = false }: any) => (
   </button>
 );
 
-export default Editor;
+export default function Editor() {
+    const { id } = useParams();
+    // The key forces React to completely unmount and remount the EditorWorkspace
+    // whenever the URL ID changes. This ensures a 100% clean Yjs document state.
+    return <EditorWorkspace key={id || "new"} />;
+}
