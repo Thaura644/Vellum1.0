@@ -8,6 +8,7 @@ import CharacterGallery from "./pages/CharacterGallery";
 import WorldEngine from "./pages/WorldEngine";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function App() {
   useEffect(() => {
@@ -28,12 +29,14 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/editor" element={<Editor />} />
-        <Route path="/editor/:id" element={<Editor />} />
-        <Route path="/beat-board" element={<BeatBoard />} />
-        <Route path="/characters" element={<CharacterGallery />} />
-        <Route path="/world" element={<WorldEngine />} />
+        
+        {/* Protected Routes */}
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/editor" element={<ProtectedRoute><Editor /></ProtectedRoute>} />
+        <Route path="/editor/:id" element={<ProtectedRoute><Editor /></ProtectedRoute>} />
+        <Route path="/beat-board" element={<ProtectedRoute><BeatBoard /></ProtectedRoute>} />
+        <Route path="/characters" element={<ProtectedRoute><CharacterGallery /></ProtectedRoute>} />
+        <Route path="/world" element={<ProtectedRoute><WorldEngine /></ProtectedRoute>} />
       </Routes>
     </Router>
   );

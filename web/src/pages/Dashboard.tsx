@@ -1,13 +1,21 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Plus, Bell, Settings, FileText, TrendingUp, History, HelpCircle, Archive, PlusCircle, X, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "../components/ThemeToggle";
 import { WalkthroughModal } from "../components/WalkthroughModal";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState<"scripts" | "library" | "community" | "dashboard">("scripts");
   const [activeModal, setActiveModal] = useState<"newProject" | "settings" | "profile" | "notifications" | "archive" | "history" | null>(null);
+  const { logout } = useAuthStore();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   const [scripts] = useState([
     { id: "1", title: "Neon Shadows", excerpt: "A tech-noir thriller set in a future where memories can be traded as currency.", progress: 64, type: "Feature" },
@@ -46,6 +54,12 @@ const Dashboard = () => {
            <div className="space-y-1">
               <NavItem icon={<HelpCircle size={18} />} label="Help" onClick={() => alert("Loading Vellum Documentation...")} />
               <NavItem icon={<Archive size={18} />} label="Archive" onClick={() => setActiveModal("archive")} />
+              <div className="pt-2 mt-2 border-t border-vellum-outline/10">
+                 <button onClick={handleLogout} className="w-full text-left font-label rounded-xl px-4 py-2.5 flex items-center gap-3 transition-all active:scale-95 duration-100 text-red-500 hover:bg-red-500/10 hover:text-red-400">
+                    <span className="opacity-80 scale-90"><User size={18} /></span>
+                    <span className="font-bold text-[13px] tracking-tight">Sign Out</span>
+                 </button>
+              </div>
            </div>
         </div>
       </aside>
