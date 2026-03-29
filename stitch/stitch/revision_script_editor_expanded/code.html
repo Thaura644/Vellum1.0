@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed-dim": "#c8c6c3",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#474745",
+                        "secondary-fixed": "#e4e2df",
+                        "surface-container-high": "#eae8e5",
+                        "inverse-primary": "#b9c3ff",
+                        "on-primary-fixed": "#08164b",
+                        "secondary": "#5e5e5c",
+                        "on-secondary-fixed": "#1b1c1a",
+                        "tertiary-fixed-dim": "#e4c193",
+                        "surface-variant": "#e4e2df",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#b09166",
+                        "on-tertiary-fixed-variant": "#5a421f",
+                        "tertiary-container": "#3f2a09",
+                        "surface-tint": "#505b92",
+                        "on-surface": "#1b1c1a",
+                        "surface-container-highest": "#e4e2df",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#384378",
+                        "surface-container": "#efeeeb",
+                        "surface-container-low": "#f5f3f0",
+                        "primary-fixed": "#dde1ff",
+                        "surface-bright": "#fbf9f6",
+                        "outline-variant": "#c6c5d1",
+                        "primary-container": "#1e2a5e",
+                        "on-secondary-container": "#636360",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1b1c1a",
+                        "outline": "#767680",
+                        "inverse-surface": "#30312f",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#291800",
+                        "secondary-container": "#e1dfdc",
+                        "surface-dim": "#dbdad7",
+                        "primary": "#061449",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#45464f",
+                        "tertiary": "#261600",
+                        "surface": "#fbf9f6",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f2f0ed",
+                        "on-primary-container": "#8793cd",
+                        "error": "#ba1a1a",
+                        "background": "#fbf9f6",
+                        "tertiary-fixed": "#ffddb2"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "script": ["Courier Prime"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .script-page {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            min-height: 1056px; /* A4 Ratio approx */
+            width: 816px; /* A4 Ratio approx */
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e4e2df; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c6c5d1; }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface overflow-hidden h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-gradient-to-r from-[#1e2a5e] to-[#061449] shadow-[0_12px_32px_rgba(27,28,26,0.06)]">
+<div class="flex items-center gap-6">
+<span class="text-xl font-bold tracking-tighter text-white uppercase">Revision</span>
+<div class="h-6 w-px bg-white/20"></div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-inter headline-sm tracking-tight text-white">Draft: Final Cut</span>
+<span class="material-symbols-outlined text-sm text-slate-300 cursor-pointer">edit</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-tertiary-fixed" style="font-variation-settings: 'FILL' 1;">cloud_done</span>
+<span class="text-[10px] uppercase tracking-widest text-slate-300">Saved to Cloud</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-2 mr-4">
+<img class="w-8 h-8 rounded-full border-2 border-primary" data-alt="portrait of a focused female screenwriter with glasses and creative expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZmmjzIFiTN_zXkBqEdWHgDD7u0uDjFGLlkmFr7rrLVoNz4KYcK6MQBWIMI19kuBGvgguT4XkYn4qgXv9HHxFNl3ncjc02TCZHp79t1ccgEkU8BdsEYLTUOpsJ1UMxSiiItD4Uo1_iAl5esT8AEjYer4ZQRiSguncQNzLBfxfp-GrIStSpo1k4MYXgTA_PFyKgg2SVWD93FWkk5rnbN8BMRDh8FidSA-1I_yAbfse1gTUyb3yfU58_vxmIT86kTwpemFRwp8Ykctg"/>
+<img class="w-8 h-8 rounded-full border-2 border-primary" data-alt="portrait of a male collaborator smiling in a professional creative studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWISqaMaOvuu54HPz-zOdF1XckfXHfOt8qPOAqg_R1snf7_SYcAxkktXHIHng1O5-w3VgUYoKXYgeD3wdgCk4tWYmELVhFl0l5jISHg7N1u_i1dpIVdAL_BofzT31j3YvjjIMBqy5HAkixWSMoMld0aDEvCaiM5CrLogQuT7566xm9NHrHak5rDcebf2XqM2jDQChRoGgRV9vomp6uoIB1k_2qod3KjC8qWBIpfjyQYJBA4QAO5_aIFpp1JyN0kZ9QAwg9fGCeI4o"/>
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center border-2 border-primary text-[10px] font-bold text-on-tertiary-fixed">+3</div>
+</div>
+<button class="bg-tertiary-fixed hover:bg-tertiary-fixed-dim transition-colors text-on-tertiary-fixed px-4 py-1.5 rounded-md text-sm font-semibold flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">share</span>
+                Share
+            </button>
+<button class="p-2 text-white hover:bg-white/10 rounded-md transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<div class="flex flex-1 pt-16 h-full overflow-hidden">
+<!-- SideNavBar (Left) -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] z-40 flex flex-col w-64 bg-[#fbf9f6] border-r border-outline-variant/20 transition-all duration-300 ease-in-out">
+<div class="p-4 border-b border-outline-variant/10">
+<div class="flex items-center justify-between mb-1">
+<span class="font-inter label-md uppercase tracking-widest text-slate-500">Project Alpha</span>
+<span class="bg-primary-container/10 text-primary-container text-[10px] px-2 py-0.5 rounded font-bold uppercase">Screenplay</span>
+</div>
+<button class="w-full mt-4 bg-primary text-white py-2 rounded-md font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">add</span>
+                    New Scene
+                </button>
+</div>
+<nav class="flex-1 overflow-y-auto p-2 space-y-1">
+<div class="px-3 py-2 text-[#1e2a5e] font-bold border-l-4 border-[#1e2a5e] flex items-center gap-3 bg-surface-container-low cursor-pointer">
+<span class="material-symbols-outlined">reorder</span>
+<span class="font-inter label-md uppercase tracking-widest">Navigator</span>
+</div>
+<!-- Scene List -->
+<div class="pl-8 pr-2 py-4 space-y-3">
+<div class="group cursor-pointer">
+<div class="text-[11px] font-bold text-primary opacity-60 uppercase mb-1">Scene 1</div>
+<div class="text-xs text-on-surface font-medium group-hover:text-primary transition-colors">EXT. CLIFFSIDE - NIGHT</div>
+</div>
+<div class="group cursor-pointer">
+<div class="text-[11px] font-bold text-primary opacity-60 uppercase mb-1">Scene 2</div>
+<div class="text-xs text-on-surface font-medium group-hover:text-primary transition-colors">INT. ABANDONED CABIN - CONTINUOUS</div>
+</div>
+<div class="group cursor-pointer opacity-50">
+<div class="text-[11px] font-bold text-primary opacity-60 uppercase mb-1">Scene 3</div>
+<div class="text-xs text-on-surface font-medium group-hover:text-primary transition-colors">EXT. FOREST PATH - DAWN</div>
+</div>
+</div>
+<div class="px-3 py-2 text-slate-500 hover:bg-[#fbf9f6] transition-all flex items-center gap-3 cursor-pointer">
+<span class="material-symbols-outlined">group</span>
+<span class="font-inter label-md uppercase tracking-widest">Characters</span>
+</div>
+<div class="px-3 py-2 text-slate-500 hover:bg-[#fbf9f6] transition-all flex items-center gap-3 cursor-pointer">
+<span class="material-symbols-outlined">description</span>
+<span class="font-inter label-md uppercase tracking-widest">Notes</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content (Canvas) -->
+<main class="flex-1 ml-64 mr-80 bg-surface-container-low overflow-y-auto flex flex-col items-center py-12 px-8">
+<div class="script-page bg-white p-24 font-script text-[12pt] leading-relaxed relative">
+<!-- Page Content -->
+<div class="mb-12 text-center uppercase">1.</div>
+<div class="mb-8 font-bold uppercase">EXT. CLIFFSIDE - NIGHT</div>
+<p class="mb-6">The wind howls against the jagged rock face. Rain lashes down in horizontal sheets. Below, the dark ocean surges with violent, rhythmic intensity.</p>
+<p class="mb-6">ELIAS (40s, soaked to the bone) stands at the precipice. He clutches a weathered leather satchel to his chest as if it were a shield.</p>
+<div class="mx-auto w-[60%] mb-1 flex flex-col items-center">
+<div class="uppercase mb-1">ELIAS</div>
+<div class="text-center italic mb-1 text-[11pt] leading-tight">(shouting over the storm)</div>
+<div class="text-left">You can't take it! It doesn't belong to the waves!</div>
+</div>
+<p class="mb-6">He takes a step back. A jagged piece of rock crumbles under his boot and falls into the abyss.</p>
+<div class="mx-auto w-[60%] mb-1 flex flex-col items-center">
+<div class="uppercase mb-1">VOICE (O.S.)</div>
+<div class="text-left">Everything belongs to the waves eventually, Elias.</div>
+</div>
+<p class="mb-6">Elias spins around. Emerging from the veil of rain is a FIGURE in a heavy yellow slicker.</p>
+<!-- Revision Ghost Example -->
+<div class="relative">
+<p class="mb-6 text-primary-fixed-dim/50">The figure raises a flare gun. The red light reflects in Elias's terrified eyes.</p>
+<div class="absolute -left-4 top-0 h-full w-0.5 bg-tertiary-fixed"></div>
+<div class="absolute -right-4 top-0 bg-tertiary-fixed px-1.5 py-0.5 rounded-sm text-[8px] font-bold text-on-tertiary-fixed uppercase">Ghost Text</div>
+</div>
+</div>
+</main>
+<!-- Right Sidebar (Revision & Comments) -->
+<aside class="fixed right-0 top-16 h-[calc(100vh-64px)] z-40 flex flex-col w-80 bg-surface-bright border-l border-outline-variant/20">
+<div class="flex-1 flex flex-col overflow-hidden">
+<!-- Revision Panel -->
+<div class="p-6">
+<span class="font-inter label-md uppercase tracking-widest text-slate-500 block mb-4">Active Revision</span>
+<div class="bg-surface-container-lowest border border-outline-variant/20 p-4 rounded-md shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="font-bold text-primary">Blue Revision</span>
+<span class="text-[10px] text-tertiary font-bold uppercase bg-tertiary-fixed px-2 py-0.5 rounded">Active</span>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-4">Current pass focusing on dialogue punch-up and atmospheric clarity for Scene 1-12.</p>
+<div class="flex items-center justify-between">
+<span class="text-[10px] text-slate-400">Modified: Oct 24, 11:42 AM</span>
+<button class="text-primary text-[10px] font-bold uppercase hover:underline">History</button>
+</div>
+</div>
+</div>
+<!-- Separation logic through spacing and tonal shift -->
+<div class="px-6 py-2 bg-surface-container-low flex items-center justify-between">
+<span class="font-inter label-md uppercase tracking-widest text-slate-500">Comments</span>
+<span class="bg-primary-container text-white text-[10px] px-2 py-0.5 rounded-full">14</span>
+</div>
+<!-- Comments Thread -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- Comment Card -->
+<div class="bg-surface-container-lowest p-4 rounded-md shadow-[0_4px_12px_rgba(27,28,26,0.03)] border-l-2 border-tertiary-fixed">
+<div class="flex items-center gap-2 mb-2">
+<img class="w-6 h-6 rounded-full" data-alt="avatar of female screenwriter Sarah" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaFaImHiZR_1Gtr4oIaDCYSmxTJri4eKFRLDWxXp3gvi5vWohSTfkt-kLv6V8Moi-rZyyGRY9F9chokLXY4TtVnuwJRt6pzQLeHmAWOLwMexXOiTLQqi1hmxzXr0kwHN1laqDGu8yfyTdUpqPjrKs1BEdF33JcPRWnRO-A-i7tOxUaB7tqXuqo4K95Go169XFHoTEkKF1wUBDXk_ygEmEbD4hC3ylHi_aDN6kBj4_ywgm4IAqTj_TXwaCkA7vhB56loDlEIdTojiw"/>
+<div>
+<div class="text-xs font-bold text-on-surface">Sarah J.</div>
+<div class="text-[9px] text-slate-400">2 hours ago</div>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant">Should Elias show more hesitation here? The satchel feels like it needs a bit more weight in the description.</p>
+<div class="mt-3 pt-3 border-t border-outline-variant/10 flex items-center gap-4">
+<button class="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">reply</span> Reply</button>
+<button class="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">check_circle</span> Resolve</button>
+</div>
+</div>
+<!-- Comment Card -->
+<div class="bg-surface-container-lowest p-4 rounded-md shadow-[0_4px_12px_rgba(27,28,26,0.03)] border-l-2 border-primary-fixed">
+<div class="flex items-center gap-2 mb-2">
+<img class="w-6 h-6 rounded-full" data-alt="avatar of male collaborator Mark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIbT6TomQI6K-GMbzBgdFJvqBPEWkMHeHPi8QTHA6SnwlpWm2gqDq08aDjLp8qI2bKqw41lps34T_0ndccz5j23mLpwIwCo4LIMAWWk8uoVeHjY_N1E_ReQ3SeSwMm0NQOgpxapEdYivJ-hrah3jKdo2jTPIi-2l6dtzvIFs06Kr8-ox2QhM-mrNJCiHHz49FXE21Y-mNudMC54rC1A-xB2h7X3vwZOD2fiQa9oNNKOyI0E18X7LCk-PTwghSn9R5cpA665QDi3OU"/>
+<div>
+<div class="text-xs font-bold text-on-surface">Mark D.</div>
+<div class="text-[9px] text-slate-400">Just now</div>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant">Agreed. Maybe add a line about the strap cutting into his shoulder.</p>
+</div>
+</div>
+</div>
+<!-- Comment Input -->
+<div class="p-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-2 bg-surface-container-low rounded-md p-2">
+<input class="bg-transparent border-none focus:ring-0 text-xs flex-1 text-on-surface" placeholder="Add a comment..." type="text"/>
+<button class="text-primary-container p-1"><span class="material-symbols-outlined">send</span></button>
+</div>
+</div>
+</aside>
+</div>
+<!-- Status Bar -->
+<footer class="fixed bottom-0 w-full h-8 bg-surface-container-highest border-t border-outline-variant/20 z-50 flex justify-between items-center px-6 text-[10px] font-inter uppercase tracking-widest text-slate-600">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">description</span>
+<span>Page 1 of 124</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">edit_note</span>
+<span>32,451 Words</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]"></div>
+<span class="text-emerald-700 font-bold">Collaborative Mode: Online</span>
+</div>
+<div class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">zoom_in</span>
+<span>100%</span>
+</div>
+</div>
+</footer>
+</body></html>

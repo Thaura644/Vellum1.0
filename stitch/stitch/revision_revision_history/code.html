@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed-dim": "#c8c6c3",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-fixed-variant": "#474745",
+              "secondary-fixed": "#e4e2df",
+              "surface-container-high": "#eae8e5",
+              "inverse-primary": "#b9c3ff",
+              "on-primary-fixed": "#08164b",
+              "secondary": "#5e5e5c",
+              "on-secondary-fixed": "#1b1c1a",
+              "tertiary-fixed-dim": "#e4c193",
+              "surface-variant": "#e4e2df",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#b09166",
+              "on-tertiary-fixed-variant": "#5a421f",
+              "tertiary-container": "#3f2a09",
+              "surface-tint": "#505b92",
+              "on-surface": "#1b1c1a",
+              "surface-container-highest": "#e4e2df",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#384378",
+              "surface-container": "#efeeeb",
+              "surface-container-low": "#f5f3f0",
+              "primary-fixed": "#dde1ff",
+              "surface-bright": "#fbf9f6",
+              "outline-variant": "#c6c5d1",
+              "primary-container": "#1e2a5e",
+              "on-secondary-container": "#636360",
+              "primary-fixed-dim": "#b9c3ff",
+              "on-primary": "#ffffff",
+              "on-background": "#1b1c1a",
+              "outline": "#767680",
+              "inverse-surface": "#30312f",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed": "#291800",
+              "secondary-container": "#e1dfdc",
+              "surface-dim": "#dbdad7",
+              "primary": "#061449",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#45464f",
+              "tertiary": "#261600",
+              "surface": "#fbf9f6",
+              "on-error-container": "#93000a",
+              "inverse-on-surface": "#f2f0ed",
+              "on-primary-container": "#8793cd",
+              "error": "#ba1a1a",
+              "background": "#fbf9f6",
+              "tertiary-fixed": "#ffddb2"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"],
+              "script": ["Courier Prime"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-tertiary-fixed selection:text-on-tertiary-fixed">
+<!-- TopNavBar Shell -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-gradient-to-r from-[#1e2a5e] to-[#061449] shadow-[0_12px_32px_rgba(27,28,26,0.06)]">
+<div class="flex items-center gap-6">
+<span class="text-xl font-bold tracking-tighter text-white uppercase">Revision</span>
+<div class="h-6 w-[1px] bg-white/20"></div>
+<div class="flex items-center gap-4">
+<span class="font-inter headline-sm tracking-tight text-white border-b-2 border-[#ffddb2]">Draft: Final Cut</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center -space-x-2 mr-4">
+<img alt="Collaborator Avatars" class="w-8 h-8 rounded-full border-2 border-[#1e2a5e] object-cover" data-alt="close up professional portrait of a male screenwriter in a studio setting with soft warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVah4YmZQd0fT03mXIEwJdx8rtVep_rrn_UPNTbt4zZbl-4wuYnQdR8gSwRcBu2GvlabGVic2od4veoIphRCs2ffzAb82evBuZoqrwFYk6IwwwbUmxbxGEIgHebzNIKveS7w-dQEQ8KYu_LHzbYfIQ_W0uugI1pEEQNwty42fTNZ1Z1GxK6bo4M34gcY2yDJCfSYhz9aNRvuNqi39QmkibrrKq2G8WMcKv6Teq8Brd60WJ5VaDvCZH3jldd8ju7OgxesVzPCJpHFc"/>
+<img alt="Collaborator Avatars" class="w-8 h-8 rounded-full border-2 border-[#1e2a5e] object-cover" data-alt="professional portrait of a creative woman director with glasses in a minimalist bright office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG0FfEnLEGXqT7BElur31n98pFftYVkHSHUBcDH23jJvDJtlK4msT4qUbb_9nSj9vSFTrOExTrzU1EWJCwWixhwfgwOJXU9Aefgy51URgPhVGWNunFXTvHQw4dvSZac5-l1T-POyr08VZaxD1OLtgMBV8_8IpqHUM-GBqcbJYj6b4pSDc3btnD0XthkCi3kDtVjXFk0CL4eQg_icV6YoSYMUcZ-HnvDjnf-nC2vWPqLBxXd0lZUL4U7ZFUIdYCLgVgIHJlTW72FuU"/>
+<div class="w-8 h-8 rounded-full border-2 border-[#1e2a5e] bg-primary-container flex items-center justify-center text-[10px] text-white font-bold">+3</div>
+</div>
+<span class="material-symbols-outlined text-slate-300 hover:bg-white/10 p-2 rounded transition-colors cursor-pointer" data-icon="cloud_done">cloud_done</span>
+<span class="material-symbols-outlined text-slate-300 hover:bg-white/10 p-2 rounded transition-colors cursor-pointer" data-icon="settings">settings</span>
+<button class="bg-tertiary-fixed text-on-tertiary-fixed px-5 py-1.5 rounded-md font-medium text-sm hover:opacity-90 transition-all scale-95 duration-200">Share</button>
+</div>
+</nav>
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] z-40 flex flex-col bg-[#f5f3f0] dark:bg-[#1b1c1a] w-64 transition-all duration-300 ease-in-out">
+<div class="p-6">
+<h2 class="font-inter label-md uppercase tracking-widest text-slate-500 mb-1">Project Alpha</h2>
+<p class="text-xs text-slate-400 mb-6">Screenplay</p>
+<button class="w-full py-3 px-4 bg-white text-primary font-bold rounded-md shadow-sm flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Scene
+            </button>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-inter label-md uppercase tracking-widest hover:bg-[#fbf9f6] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="reorder">reorder</span>
+                Navigator
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-inter label-md uppercase tracking-widest hover:bg-[#fbf9f6] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                Characters
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#1e2a5e] font-bold border-l-4 border-[#1e2a5e] bg-[#fbf9f6] font-inter label-md uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                Notes
+            </a>
+</nav>
+</aside>
+<!-- Main Content Area (History Canvas) -->
+<main class="ml-64 mt-16 p-8 min-h-screen">
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Revision Timeline Header -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="font-headline text-3xl font-extrabold tracking-tight text-primary">Revision History</h1>
+<p class="text-on-surface-variant mt-1">Comparing <span class="font-semibold">Today, 2:45 PM</span> with <span class="font-semibold">Yesterday, 10:15 AM</span></p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 text-on-surface-variant font-medium text-sm hover:bg-surface-container transition-colors rounded-md">Discard Preview</button>
+<button class="bg-primary-container text-white px-6 py-2 rounded-md font-semibold text-sm shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="history_toggle_off">history_toggle_off</span>
+                        Restore this version
+                    </button>
+</div>
+</header>
+<!-- Timeline Slider Control -->
+<section class="bg-surface-container-low rounded-xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary-container" data-icon="fast_rewind">fast_rewind</span>
+<div class="relative w-[600px] h-2 bg-surface-container-highest rounded-full">
+<div class="absolute top-0 left-0 w-3/4 h-full bg-primary-container rounded-full"></div>
+<div class="absolute top-1/2 left-3/4 -translate-y-1/2 w-6 h-6 bg-white border-4 border-primary-container rounded-full shadow-md cursor-pointer"></div>
+<!-- Markers -->
+<div class="absolute top-4 left-0 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">OCT 12</div>
+<div class="absolute top-4 left-1/4 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">OCT 18</div>
+<div class="absolute top-4 left-1/2 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">OCT 24</div>
+<div class="absolute top-4 left-3/4 text-[10px] font-bold text-primary tracking-tighter">CURRENT</div>
+</div>
+<span class="material-symbols-outlined text-slate-300" data-icon="fast_forward">fast_forward</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined" data-icon="zoom_in">zoom_in</span>
+</button>
+<button class="p-2 rounded hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Revision List (Bento-style horizontal scroll) -->
+<div class="flex gap-4 overflow-x-auto pb-4 hide-scrollbar">
+<!-- Revision Card 1 -->
+<div class="min-w-[280px] bg-surface-container-lowest p-5 rounded-lg border-l-4 border-tertiary shadow-sm transition-transform hover:-translate-y-1 cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-tertiary-container bg-tertiary-fixed px-2 py-0.5 rounded">Major Cut</span>
+<span class="text-[10px] text-slate-400 font-medium">2:45 PM</span>
+</div>
+<h4 class="font-bold text-on-surface text-sm mb-1">Restructured Act II opening</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2 mb-4">Removed the diner scene and replaced it with the rooftop dialogue sequence for better tension.</p>
+<div class="flex items-center gap-2">
+<img alt="Author" class="w-5 h-5 rounded-full object-cover" data-alt="close up headshot of a mature creative male director with silver hair and thoughtful expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFbQKWbwK9txCe_AzRlodSHRzXS7_QhQpyncZ-Gv0Nq4eKDAle8hlPdE_NsR-RGwgnDQMI2JKdL33pIihbrSUSbn6m6l5lMu1C4Zknq_tgXW0TO2amtM-HLycDqC0f_aw7eB_arDuloJ7nFzav9al5uran7rjJwV30W7-HZfnDUqv2Ln4HebRiFJsOy4dC1VXDvDghvAAs2snj7BACD9ofIa16JKtqLXV9U_e_82P9AVu6IYmNyfa3UYsvq5BfYLvPz8njk6nVY_w"/>
+<span class="text-[10px] font-semibold text-on-surface">Julian Vance</span>
+</div>
+</div>
+<!-- Revision Card 2 -->
+<div class="min-w-[280px] bg-surface-container-low p-5 rounded-lg opacity-80 hover:opacity-100 transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-surface-container-highest px-2 py-0.5 rounded">Polish</span>
+<span class="text-[10px] text-slate-400 font-medium">10:15 AM</span>
+</div>
+<h4 class="font-bold text-on-surface text-sm mb-1">Character Voice Adjustments</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2 mb-4">Refining Sarah's dialogue in Scene 14 to feel more urgent and less analytical.</p>
+<div class="flex items-center gap-2">
+<img alt="Author" class="w-5 h-5 rounded-full object-cover" data-alt="portrait of a young female screenwriter with a creative and focused look in a modern cafe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpcEeoU9GIGmW9nlWvDvRpatiO2Y1gL-bEC3OsR9k6Sm2nn7yHr967XMrL7XdMcxzwmFuo-VxHI5jU3ZBeSD5towDZ3HjHrNO6Zd6XDeB4tlzsWzuMASRnP19IE2v-moCias3whn2_X8KGMHNdt0RdUZRR5mPLfG5PiDzjZf2ouzahrl9RpChHfJ4EF9wX2qNk61HDRXS1Qo5_JkGt_a2QMdBBlUFnx0x9b0Dwv4TjuVYhlPlHTWcBIuAxmeoxeqNlyv2fv_lmfHI"/>
+<span class="text-[10px] font-semibold text-on-surface">Maya Sterling</span>
+</div>
+</div>
+<!-- Revision Card 3 -->
+<div class="min-w-[280px] bg-surface-container-low p-5 rounded-lg opacity-80 hover:opacity-100 transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-surface-container-highest px-2 py-0.5 rounded">Draft</span>
+<span class="text-[10px] text-slate-400 font-medium">Yesterday</span>
+</div>
+<h4 class="font-bold text-on-surface text-sm mb-1">Initial Draft Completion</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2 mb-4">First full pass of the rooftop scene including stage directions and ambient cues.</p>
+<div class="flex items-center gap-2">
+<img alt="Author" class="w-5 h-5 rounded-full object-cover" data-alt="professional male profile photo with neutral background and soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFaAlsEaL-38Dlf0Clx1zh0VlIgepqg4bEceI6tcIUhDMhVTyKL2WGb-NlLoxwVSfCUaALruew0nJEA8Jxlb_p0I6URsfdFOCFDscZTmLkkZPjU6gpKSazrOosb9q_lsB4Zl6BejYlMAI71tTD1j58_mZqpfEk8pHfy-0efVJQlnPb6gV2PRbgvKO7kbnKpWV6xphA0Qe9M9e14LS0lfM4WSDfsBltOk1CITxYxKWvEpkPrxWYy73QQhD-FbitKl-ihbAs8W4GyCY"/>
+<span class="text-[10px] font-semibold text-on-surface">David Chen</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Comparison Preview Mode -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-px bg-outline-variant/20 rounded-xl overflow-hidden shadow-2xl">
+<!-- Current Version -->
+<div class="bg-surface-container-low p-12 min-h-[600px] relative">
+<div class="absolute top-4 left-6 flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary">Current View</span>
+</div>
+<div class="font-script text-on-surface leading-relaxed max-w-md mx-auto space-y-6">
+<p class="text-center mb-12 uppercase underline">EXT. ROOFTOP - NIGHT</p>
+<p>The city hums below, a carpet of electric fire. ELARA (20s) stands at the edge, the wind whipping her coat like a dark wing.</p>
+<p class="text-center uppercase px-12">ELARA</p>
+<p class="px-8 italic">Wait. You don't get to just walk back in here. Not after Zurich.</p>
+<p>Kaelen remains in the shadows. Only the cherry of his cigarette is visible.</p>
+<div class="bg-primary-fixed-dim/10 border-l-2 border-primary-container p-4 -mx-4">
+<p class="text-[10px] font-bold text-primary-container uppercase mb-2">Revision Ghost: Maya Typing...</p>
+<p>KAELEN: Zurich was a lifetime ago. For both of us.</p>
+</div>
+</div>
+</div>
+<!-- Historical Version -->
+<div class="bg-surface p-12 min-h-[600px] relative">
+<div class="absolute top-4 left-6 flex items-center gap-2">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Version: Oct 18, 10:15 AM</span>
+</div>
+<div class="font-script text-on-surface-variant leading-relaxed max-w-md mx-auto space-y-6">
+<p class="text-center mb-12 uppercase underline">EXT. ROOFTOP - NIGHT</p>
+<p>ELARA stands by the ledge. KAELEN is behind her. The wind is loud.</p>
+<p class="text-center uppercase px-12">ELARA</p>
+<p class="px-8 italic">I thought you were dead. In Zurich. They said you didn't make it off the train.</p>
+<p class="bg-error-container/20 text-error line-through decoration-error/30">KAELEN: I almost didn't. But I had a reason to keep moving.</p>
+<div class="flex items-center gap-2 py-2">
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="edit_note">edit_note</span>
+<span class="text-[10px] italic text-tertiary">Director's Note: This feels too expository. Keep it sharper.</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full py-12 px-8 flex justify-between items-center bg-[#fbf9f6] dark:bg-[#1b1c1a] border-t border-slate-200 dark:border-slate-800/20">
+<div class="flex items-center gap-8">
+<span class="font-bold text-[#1e2a5e] tracking-tight">Revision Screenwriting</span>
+<div class="flex gap-6">
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Resources</a>
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Documentation</a>
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Pricing</a>
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Privacy</a>
+</div>
+</div>
+<p class="font-inter text-sm text-slate-500 opacity-80">© 2024 Revision Screenwriting. All rights reserved.</p>
+</footer>
+</body></html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed-dim": "#c8c6c3",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-fixed-variant": "#474745",
+              "secondary-fixed": "#e4e2df",
+              "surface-container-high": "#eae8e5",
+              "inverse-primary": "#b9c3ff",
+              "on-primary-fixed": "#08164b",
+              "secondary": "#5e5e5c",
+              "on-secondary-fixed": "#1b1c1a",
+              "tertiary-fixed-dim": "#e4c193",
+              "surface-variant": "#e4e2df",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#b09166",
+              "on-tertiary-fixed-variant": "#5a421f",
+              "tertiary-container": "#3f2a09",
+              "surface-tint": "#505b92",
+              "on-surface": "#1b1c1a",
+              "surface-container-highest": "#e4e2df",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#384378",
+              "surface-container": "#efeeeb",
+              "surface-container-low": "#f5f3f0",
+              "primary-fixed": "#dde1ff",
+              "surface-bright": "#fbf9f6",
+              "outline-variant": "#c6c5d1",
+              "primary-container": "#1e2a5e",
+              "on-secondary-container": "#636360",
+              "primary-fixed-dim": "#b9c3ff",
+              "on-primary": "#ffffff",
+              "on-background": "#1b1c1a",
+              "outline": "#767680",
+              "inverse-surface": "#30312f",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed": "#291800",
+              "secondary-container": "#e1dfdc",
+              "surface-dim": "#dbdad7",
+              "primary": "#061449",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#45464f",
+              "tertiary": "#261600",
+              "surface": "#fbf9f6",
+              "on-error-container": "#93000a",
+              "inverse-on-surface": "#f2f0ed",
+              "on-primary-container": "#8793cd",
+              "error": "#ba1a1a",
+              "background": "#fbf9f6",
+              "tertiary-fixed": "#ffddb2"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"],
+              "script": ["Courier Prime"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .script-canvas {
+            font-family: 'Courier Prime', monospace;
+            line-height: 1.2;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-tertiary-fixed selection:text-on-tertiary-fixed">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-gradient-to-r from-[#1e2a5e] to-[#061449] shadow-[0_12px_32px_rgba(27,28,26,0.06)]">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-white uppercase">Revision</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="font-inter headline-sm tracking-tight text-white border-b-2 border-[#ffddb2] transition-colors" href="#">Draft: Final Cut</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-300 hover:bg-white/10 p-2 rounded transition-colors" data-icon="cloud_done">cloud_done</button>
+<button class="material-symbols-outlined text-slate-300 hover:bg-white/10 p-2 rounded transition-colors" data-icon="settings">settings</button>
+<button class="bg-tertiary-fixed text-on-tertiary-fixed px-4 py-1.5 rounded-md font-medium text-sm hover:opacity-90 transition-all scale-95 duration-200">Share</button>
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img alt="Collaborator Avatars" class="w-full h-full object-cover" data-alt="close-up portrait of a professional writer in soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0ojvwdd49s9OQQP4gogdnm3aZlH1rv8uZ5X8yADUBIqhbaolfReoAPpTuvCVeI-eaj6M6HTA6THMxpWcI4JPQWwpAbNKFDKPKPULWhnQ-VQOAzren6S39M-CwZb1wUlnn5rDyDs-h2TpkJGgAVeu1MSCvxQqIJR26qwZNfZxY8yiJoKJGDFKH7zny6BYA5LZn7nX50nHNCmhVnchoLyxls-Yiohxu3fHt1NCBhhhNfuy0FsTuYRpENdxGSze25M3WX7-oVKNf_jY"/>
+</div>
+</div>
+</header>
+<main class="pt-16">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex flex-col items-center justify-center px-6 overflow-hidden bg-surface">
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+<div class="absolute top-0 left-1/4 w-96 h-96 bg-primary-fixed-dim blur-[120px] rounded-full"></div>
+<div class="absolute bottom-0 right-1/4 w-96 h-96 bg-tertiary-fixed blur-[120px] rounded-full"></div>
+</div>
+<div class="relative z-10 text-center max-w-4xl mx-auto mb-16">
+<h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter text-primary mb-6">Write. Collaborate. Revise.</h1>
+<p class="text-xl text-on-surface-variant font-light mb-10 max-w-2xl mx-auto">The high-precision screenwriting studio where your story takes center stage. Precision-cut tools for the modern storyteller.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button class="bg-gradient-to-br from-primary-container to-primary text-white px-8 py-4 rounded-md font-bold text-lg shadow-lg hover:translate-y-[-2px] transition-all">Start Writing Free</button>
+<button class="bg-surface-container-low text-primary px-8 py-4 rounded-md font-bold text-lg hover:bg-surface-container transition-all">View Demo</button>
+</div>
+</div>
+<!-- Stylized Script Page Visual -->
+<div class="relative z-10 w-full max-w-5xl mx-auto transform perspective-1000 rotate-x-2">
+<div class="bg-surface-container-low shadow-2xl rounded-sm p-12 md:p-24 min-h-[600px] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/10"></div>
+<div class="script-canvas text-[#1b1c1a] space-y-8">
+<div class="text-center uppercase tracking-[0.2em] mb-12">EXT. HOLLYWOOD HILLS - NIGHT</div>
+<p class="max-w-[80%] mx-auto">The city sprawls below like a circuit board of neon and amber. A lone figure stands on the precipice.</p>
+<div class="max-w-[50%] mx-auto text-center">
+<div class="uppercase mb-1">JACK</div>
+<p>(to himself)</p>
+<p>It was always about the next line. Never the last one.</p>
+</div>
+<p class="max-w-[80%] mx-auto">He looks at the notebook in his hands. The wind catches the pages. A cursor blinks at the end of the world<span class="inline-block w-[2px] h-[1.2em] bg-primary ml-1 align-middle cursor-blink"></span></p>
+</div>
+<!-- Collaborative Revision Ghost Floating UI -->
+<div class="absolute top-1/4 right-8 w-64 glass-panel p-4 rounded-xl shadow-xl border border-white/20">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Director's Note</span>
+</div>
+<p class="text-sm text-on-surface leading-relaxed">"Can we make this moment feel more isolated? Increase the negative space in the dialogue."</p>
+<div class="mt-3 pt-3 border-t border-black/5 flex items-center justify-between">
+<div class="flex -space-x-2">
+<img alt="Avatar" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="professional male avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrFz21bIsfWLUlPPEmm2QAW6SNduTxe2TViTpHZUssrttozMQVFGa6RQgZFCRNqKtcIKuBjJt4wJChmq0iHndIbbQmvVIa51dxun5FbBi72BtyRpKnMyOyeZlms2WJIQijWJD2uD_XrRjc32HPSudx3XqoYk4v-UW411_ln1PWZuXVJeYMh0hMib8p4JfXO5O7MeySjYwIARmzo222oK_jRALb7Kq_EkZ2JhAnS51H8V0jrBSTm0oNN7VZZmlBIIG6NP57lBbXvlg"/>
+<img alt="Avatar" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="professional female avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_ZsWl4Xc4r9WCCVMCdT65uAeEYGwpikKuSctx1M6ju3fh_EJbwDMqMxn1_0Pgr0BKdbXssLJabjWs5XtAnGMfJrSwxpDFU3afwwE54GxZq_9RbLYgspxN92M7Ud6C2exP2U4dqBd-X8ZUUgGmNKmXpkCsXGQDcSGd2_klh0xY4O3MxmoppWh_u-tOF2ytUsuuOymSy-UAS-sui8VB4aaeUebxW7dOgswexMsr1VuwDEET-XLn0AWYoKhHNXtNfLqdb7vEGoEmNc4"/>
+</div>
+<span class="text-[10px] text-on-surface-variant">2 others active</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Bento Grid -->
+<section class="py-24 px-6 bg-surface-bright">
+<div class="max-w-7xl mx-auto">
+<div class="mb-16">
+<h2 class="label-md font-inter uppercase tracking-widest text-primary-container mb-2">Capabilities</h2>
+<h3 class="text-4xl font-bold tracking-tight text-on-surface">Designed for the Craft</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Feature 1: Auto Formatting -->
+<div class="md:col-span-8 bg-surface-container-low rounded-xl p-8 flex flex-col justify-between group hover:bg-surface-container transition-colors min-h-[400px]">
+<div>
+<span class="material-symbols-outlined text-primary mb-6 text-4xl" data-icon="auto_awesome">auto_awesome</span>
+<h4 class="text-2xl font-bold mb-4">Intelligent Auto-Formatting</h4>
+<p class="text-on-surface-variant max-w-md leading-relaxed">Forget about TAB and ENTER. Revision understands screenplay structure and formats as you type, letting you focus on the rhythm of your story.</p>
+</div>
+<div class="mt-8 bg-surface-container-lowest/50 p-6 rounded-lg overflow-hidden">
+<div class="flex gap-4 items-center">
+<div class="px-3 py-1 bg-primary text-white text-[10px] rounded uppercase">Slugline</div>
+<div class="px-3 py-1 bg-secondary text-white text-[10px] rounded uppercase">Action</div>
+<div class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-[10px] rounded uppercase font-bold">Dialogue</div>
+</div>
+</div>
+</div>
+<!-- Feature 2: Real-time Collab -->
+<div class="md:col-span-4 bg-primary-container rounded-xl p-8 text-white flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-tertiary-fixed mb-6 text-4xl" data-icon="groups">groups</span>
+<h4 class="text-2xl font-bold mb-4">Real-time Collaboration</h4>
+<p class="text-on-primary-container leading-relaxed">Write together from anywhere. See edits as they happen with Revision Ghost cursors.</p>
+</div>
+<div class="flex -space-x-3 mt-8">
+<div class="w-12 h-12 rounded-full border-4 border-primary-container bg-slate-300 overflow-hidden"><img alt="Team" data-alt="creative professional face" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANhATdW02tlYEUJd9iJ_K_gJ9D4DTzxnY8Wa9jYb-zkcs2NyASjiowDywaCmsfoMywQ4vyODenXDqTcl6lCKxVHGTbmG8mlAjThFE4UWgkwiDaCU8z2L6tiU-bMloB_8QBKvtRk_ixPYxEIQtJCwGGjUa_qEUC4I-XbcTmLcNHdLIFwdac7K7iQtrlKULU9UlOK0QZmm0i9KklkFbPCtiRxP5kTH2L9DUgS6-Buz4hSUAmGV1IXFK-CG0aMwwRWbWkWRIhCFbCxs8"/></div>
+<div class="w-12 h-12 rounded-full border-4 border-primary-container bg-slate-400 overflow-hidden"><img alt="Team" data-alt="creative professional face" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANo6QcOUN5UZyAEjfrzKAQU5ya_eodWulptjHjLA-5xbey0RUO8U5qLiTRWD7g4S8p8ecaSlZvIBWvz2xmKKqVZICbOJXn6VCl4y32qeZtLT9-eLx7Xi-CM6m86SNcCpAM0T36pakPf3y-6Opep1YTMZMin2YlEGZCbs-IEmcoUQoyQqHT8pdrJPdHNvF-wj9u0LECBwfc2U5GTE2A5K6-7bg-mxcjL6RJQSAlJLG1hT-LuGX6p_CdqGjuncehMz5Yax2NhdBOi98"/></div>
+<div class="w-12 h-12 rounded-full border-4 border-primary-container bg-slate-500 overflow-hidden"><img alt="Team" data-alt="creative professional face" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3HWsc4W8eLk8uG0whTdn9HCeIKnc-0j7f38k_uNENNQ3Xxf_tbKhi8HHHjP_YU9UBJl80jehVvx83_uu8SpuyegKFWXGR59jOYfP4jmMTjjm46Gq3Ax3yNEHATNTS_-32KHiEfwKKUMuvHjAvhZ44ZPePZYw_zNe5s1zzpfGucqTzAd9NE3E-5RnjHThL49aVPGQSGIz-tXom1IwJTW2G7numS6nNmwJ47NA6YPF6hB51GNiWSElAlRhsd8L2R8IStdwR5u1WsvU"/></div>
+<div class="w-12 h-12 rounded-full border-4 border-primary-container bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed text-xs font-bold">+5</div>
+</div>
+</div>
+<!-- Feature 3: Revision History -->
+<div class="md:col-span-4 bg-surface-container-high rounded-xl p-8 flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-primary mb-6 text-4xl" data-icon="history">history</span>
+<h4 class="text-2xl font-bold mb-4">Revision History</h4>
+<p class="text-on-surface-variant leading-relaxed">Never lose a single comma. Every keystroke is saved, letting you travel back to any version of your script.</p>
+</div>
+<div class="mt-8 space-y-2">
+<div class="flex justify-between items-center text-xs p-2 bg-white/40 rounded">
+<span class="font-bold">Production Draft</span>
+<span class="text-primary opacity-60">2h ago</span>
+</div>
+<div class="flex justify-between items-center text-xs p-2 bg-white/40 rounded">
+<span class="font-bold">Table Read Cut</span>
+<span class="text-primary opacity-60">Yesterday</span>
+</div>
+</div>
+</div>
+<!-- Feature 4: Beat Board -->
+<div class="md:col-span-8 bg-secondary-container rounded-xl p-8 flex flex-col md:flex-row gap-8">
+<div class="flex-1">
+<span class="material-symbols-outlined text-primary mb-6 text-4xl" data-icon="dashboard">dashboard</span>
+<h4 class="text-2xl font-bold mb-4">The Beat Board</h4>
+<p class="text-on-secondary-container leading-relaxed">Map your story arcs visually. Move scenes, tag characters, and build your narrative foundation before you write a single word.</p>
+</div>
+<div class="flex-1 grid grid-cols-2 gap-3">
+<div class="aspect-video bg-white/40 rounded border-l-4 border-primary p-3 text-[8px] uppercase tracking-tighter overflow-hidden">Inciting Incident: The Letter</div>
+<div class="aspect-video bg-white/40 rounded border-l-4 border-tertiary p-3 text-[8px] uppercase tracking-tighter overflow-hidden">Plot Point 1: Departure</div>
+<div class="aspect-video bg-white/40 rounded border-l-4 border-secondary p-3 text-[8px] uppercase tracking-tighter overflow-hidden">Midpoint: The Reveal</div>
+<div class="aspect-video bg-white/40 rounded border-l-4 border-primary p-3 text-[8px] uppercase tracking-tighter overflow-hidden">Climax: Final Confrontation</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-32 px-6">
+<div class="max-w-4xl mx-auto bg-primary-container rounded-xl overflow-hidden relative shadow-2xl">
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
+<div class="relative z-10 p-12 md:p-20 text-center">
+<h2 class="text-4xl md:text-5xl font-extrabold text-white mb-8 tracking-tighter">Ready to write your masterpiece?</h2>
+<p class="text-on-primary-container text-lg mb-12 max-w-xl mx-auto">Join the new standard of screenwriting software. Start your journey today for free.</p>
+<button class="bg-tertiary-fixed text-on-tertiary-fixed px-12 py-5 rounded-md font-bold text-xl hover:scale-105 transition-transform">Create Account Now</button>
+<p class="mt-6 text-sm text-on-primary-container opacity-60">No credit card required • Instant setup</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-8 flex flex-col md:flex-row justify-between items-center bg-[#fbf9f6] dark:bg-[#1b1c1a] border-t border-slate-200 dark:border-slate-800/20">
+<div class="mb-8 md:mb-0">
+<span class="font-bold text-[#1e2a5e] text-2xl uppercase tracking-tighter">Revision</span>
+<p class="font-inter text-sm text-slate-500 mt-2">© 2024 Revision Screenwriting. All rights reserved.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Resources</a>
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Documentation</a>
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Pricing</a>
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Privacy</a>
+</div>
+<div class="mt-8 md:mt-0 flex gap-4">
+<button class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors" data-icon="brand_awareness">brand_awareness</button>
+<button class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors" data-icon="language">language</button>
+</div>
+</footer>
+</body></html>

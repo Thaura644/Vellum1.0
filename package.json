@@ -1,0 +1,12 @@
+{
+  "name": "revision-root",
+  "private": true,
+  "workspaces": [
+    "web",
+    "api",
+    "packages/*"
+  ],
+  "dependencies": {
+    "xmlbuilder2": "^4.0.3"
+  }
+}

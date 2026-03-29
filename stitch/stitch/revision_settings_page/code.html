@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Revision Settings - Screenwriting Suite</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed-dim": "#c8c6c3",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-fixed-variant": "#474745",
+              "secondary-fixed": "#e4e2df",
+              "surface-container-high": "#eae8e5",
+              "inverse-primary": "#b9c3ff",
+              "on-primary-fixed": "#08164b",
+              "secondary": "#5e5e5c",
+              "on-secondary-fixed": "#1b1c1a",
+              "tertiary-fixed-dim": "#e4c193",
+              "surface-variant": "#e4e2df",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#b09166",
+              "on-tertiary-fixed-variant": "#5a421f",
+              "tertiary-container": "#3f2a09",
+              "surface-tint": "#505b92",
+              "on-surface": "#1b1c1a",
+              "surface-container-highest": "#e4e2df",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#384378",
+              "surface-container": "#efeeeb",
+              "surface-container-low": "#f5f3f0",
+              "primary-fixed": "#dde1ff",
+              "surface-bright": "#fbf9f6",
+              "outline-variant": "#c6c5d1",
+              "primary-container": "#1e2a5e",
+              "on-secondary-container": "#636360",
+              "primary-fixed-dim": "#b9c3ff",
+              "on-primary": "#ffffff",
+              "on-background": "#1b1c1a",
+              "outline": "#767680",
+              "inverse-surface": "#30312f",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed": "#291800",
+              "secondary-container": "#e1dfdc",
+              "surface-dim": "#dbdad7",
+              "primary": "#061449",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#45464f",
+              "tertiary": "#261600",
+              "surface": "#fbf9f6",
+              "on-error-container": "#93000a",
+              "inverse-on-surface": "#f2f0ed",
+              "on-primary-container": "#8793cd",
+              "error": "#ba1a1a",
+              "background": "#fbf9f6",
+              "tertiary-fixed": "#ffddb2"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"],
+              "script": ["Courier Prime"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c6c5d1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-tertiary-fixed selection:text-on-tertiary-fixed">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-gradient-to-r from-[#1e2a5e] to-[#061449] shadow-[0_12px_32px_rgba(27,28,26,0.06)]">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-white uppercase">Revision</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="font-inter headline-sm tracking-tight text-white border-b-2 border-[#ffddb2] transition-colors" href="#">Draft: Final Cut</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-300 hover:bg-white/10 transition-colors p-2 rounded-md" data-icon="cloud_done">cloud_done</button>
+<button class="material-symbols-outlined text-slate-300 hover:bg-white/10 transition-colors p-2 rounded-md" data-icon="settings">settings</button>
+<button class="bg-tertiary-fixed text-on-tertiary-fixed px-4 py-1.5 rounded-md font-medium text-sm hover:opacity-90 transition-all">Share</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="Collaborator Avatars" data-alt="professional male portrait with neutral background for user profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoFH1rYVqfuSoGvARSWuDLgOmebO7Zfp2STfXTw9PHTSbdrj65_eTQnT_WmlU4IwDlZqYg33hBwTSD3wFSX0_UDdOpkkire_0awX56dGnyPJP5AdLcSOCbMtfnrxR9TKE_5eYzSkTA3tzB7kW8SPE0dM2t0pzJREKfpJbZ8vfy9_Xm33vomwizTqpa1TqKEwAu__IP8bWWBRmzG4anLDG6LZrPqgy1bgsBB_kQlVgLOSA8XgK9bFq9BELmUx89ITHxG93w2C9WmK4"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] z-40 flex flex-col bg-[#f5f3f0] dark:bg-[#1b1c1a] w-64 border-r border-outline-variant/20">
+<div class="p-6">
+<h2 class="font-inter label-md uppercase tracking-widest text-slate-500 mb-1">Project Alpha</h2>
+<p class="text-[10px] uppercase tracking-widest text-[#1e2a5e] font-bold">Screenplay</p>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-inter label-md uppercase tracking-widest hover:bg-[#fbf9f6] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="reorder">reorder</span>
+<span>Navigator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-inter label-md uppercase tracking-widest hover:bg-[#fbf9f6] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Characters</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#1e2a5e] dark:text-[#ffddb2] font-bold border-l-4 border-[#1e2a5e] bg-[#fbf9f6] font-inter label-md uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-inter label-md uppercase tracking-widest hover:bg-[#fbf9f6] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span>Notes</span>
+</a>
+</nav>
+<div class="p-6 mt-auto">
+<button class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary-container to-primary text-white py-3 rounded-md shadow-lg font-bold tracking-tight">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Scene
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 min-h-[calc(100vh-64px)] bg-surface-container-low custom-scrollbar overflow-y-auto">
+<div class="max-w-4xl mx-auto pb-20">
+<!-- Header Section -->
+<div class="mb-12">
+<h1 class="text-4xl font-extrabold tracking-tighter text-primary mb-2">Revision Settings</h1>
+<p class="text-on-surface-variant font-medium">Configure your workspace, editor preferences, and account details.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Left Navigation Column (Focus Zones) -->
+<div class="md:col-span-4 space-y-4">
+<nav class="flex flex-col gap-1">
+<a class="p-4 rounded-md bg-white shadow-sm border-l-4 border-primary text-primary font-bold flex items-center gap-3" href="#general">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+                            General
+                        </a>
+<a class="p-4 rounded-md hover:bg-surface-container transition-colors text-on-surface-variant flex items-center gap-3" href="#editor">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+                            Editor
+                        </a>
+<a class="p-4 rounded-md hover:bg-surface-container transition-colors text-on-surface-variant flex items-center gap-3" href="#export">
+<span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+                            Export
+                        </a>
+<a class="p-4 rounded-md hover:bg-surface-container transition-colors text-on-surface-variant flex items-center gap-3" href="#account">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+                            Account
+                        </a>
+</nav>
+<!-- Info Bento Card -->
+<div class="p-6 bg-primary-container rounded-xl text-white mt-8 shadow-xl">
+<span class="material-symbols-outlined text-tertiary-fixed mb-4" data-icon="auto_awesome">auto_awesome</span>
+<h4 class="font-bold text-lg mb-2">Professional Mode</h4>
+<p class="text-xs text-on-primary-container leading-relaxed">Typewriter scrolling and focus mode are enabled for this project. Keep writing, we'll handle the formatting.</p>
+</div>
+</div>
+<!-- Main Settings Form Column -->
+<div class="md:col-span-8 space-y-12">
+<!-- General Section -->
+<section class="space-y-6" id="general">
+<div class="flex items-center gap-2 mb-4">
+<span class="h-[1px] flex-1 bg-outline-variant/30"></span>
+<span class="font-inter label-md uppercase tracking-widest text-slate-400">General Preferences</span>
+<span class="h-[1px] flex-1 bg-outline-variant/30"></span>
+</div>
+<div class="glass-panel p-6 rounded-xl space-y-6 border border-white/40">
+<div class="flex items-center justify-between">
+<div>
+<label class="block font-bold text-primary mb-1">Auto-save Drafts</label>
+<p class="text-xs text-on-surface-variant">Cloud backup every 30 seconds while typing.</p>
+</div>
+<div class="relative inline-flex h-6 w-11 items-center rounded-full bg-primary cursor-pointer">
+<span class="translate-x-6 inline-block h-4 w-4 rounded-full bg-white transition"></span>
+</div>
+</div>
+<div class="space-y-3">
+<label class="block font-bold text-primary">Revision Colors</label>
+<div class="flex gap-3">
+<button class="w-8 h-8 rounded-sm bg-[#ffffff] border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-primary" data-icon="check">check</span>
+</button>
+<button class="w-8 h-8 rounded-sm bg-[#ffddb2]"></button>
+<button class="w-8 h-8 rounded-sm bg-[#c8e6c9]"></button>
+<button class="w-8 h-8 rounded-sm bg-[#bbdefb]"></button>
+<button class="w-8 h-8 rounded-sm bg-[#f8bbd0]"></button>
+<div class="w-8 h-8 rounded-sm border-2 border-dashed border-outline-variant flex items-center justify-center text-outline cursor-pointer hover:border-primary">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant italic">Active: White Revision (Standard)</p>
+</div>
+</div>
+</section>
+<!-- Editor Section -->
+<section class="space-y-6" id="editor">
+<div class="flex items-center gap-2 mb-4">
+<span class="h-[1px] flex-1 bg-outline-variant/30"></span>
+<span class="font-inter label-md uppercase tracking-widest text-slate-400">Editor &amp; Craft</span>
+<span class="h-[1px] flex-1 bg-outline-variant/30"></span>
+</div>
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10 space-y-8">
+<div class="grid grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="block font-bold text-primary">Font Size</label>
+<select class="w-full bg-surface-container-low border-none rounded-sm px-4 py-2 focus:ring-2 focus:ring-primary-container/20 text-sm">
+<option>10pt</option>
+<option selected="">12pt (Standard)</option>
+<option>14pt</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="block font-bold text-primary">Paper Style</label>
+<select class="w-full bg-surface-container-low border-none rounded-sm px-4 py-2 focus:ring-2 focus:ring-primary-container/20 text-sm">
+<option>Pure White</option>
+<option selected="">Warm Ivory</option>
+<option>Sepia Film</option>
+</select>
+</div>
+</div>
+<div class="flex items-start gap-4 p-4 bg-tertiary-fixed/30 rounded-md border-l-4 border-tertiary-fixed">
+<div class="pt-1">
+<div class="relative inline-flex h-5 w-9 items-center rounded-full bg-secondary cursor-pointer">
+<span class="translate-x-1 inline-block h-3 w-3 rounded-full bg-white transition"></span>
+</div>
+</div>
+<div>
+<label class="block font-bold text-on-tertiary-fixed">Typewriter Mode</label>
+<p class="text-xs text-on-tertiary-fixed-variant">Keeps the active line vertically centered in the viewport.</p>
+</div>
+</div>
+<div class="space-y-3">
+<label class="block font-bold text-primary">Live Preview</label>
+<div class="p-6 bg-[#f5f3f0] rounded border border-outline-variant/20 font-script text-slate-600">
+                                    INT. WRITER'S STUDIO - NIGHT
+                                    <br/><br/>
+                                    A blinking cursor pulses on the screen. The only light comes from the glowing blue monitor.
+                                </div>
+</div>
+</div>
+</section>
+<!-- Export Section -->
+<section class="space-y-6" id="export">
+<div class="flex items-center gap-2 mb-4">
+<span class="h-[1px] flex-1 bg-outline-variant/30"></span>
+<span class="font-inter label-md uppercase tracking-widest text-slate-400">Export Parameters</span>
+<span class="h-[1px] flex-1 bg-outline-variant/30"></span>
+</div>
+<div class="glass-panel p-6 rounded-xl space-y-6 border border-white/40">
+<div class="flex items-center justify-between p-4 bg-white/60 rounded-lg">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="picture_as_pdf">picture_as_pdf</span>
+<div>
+<p class="font-bold text-primary">PDF Watermark</p>
+<p class="text-xs text-on-surface-variant">Include 'PRIVATE DRAFT' on all pages.</p>
+</div>
+</div>
+<div class="relative inline-flex h-6 w-11 items-center rounded-full bg-primary cursor-pointer">
+<span class="translate-x-6 inline-block h-4 w-4 rounded-full bg-white transition"></span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block font-bold text-primary">Metadata Inclusion</label>
+<div class="grid grid-cols-2 gap-2">
+<label class="flex items-center gap-2 text-sm p-3 bg-white/40 rounded border border-outline-variant/10">
+<input checked="" class="rounded-sm text-primary focus:ring-primary border-outline" type="checkbox"/>
+                                        Scene Numbers
+                                    </label>
+<label class="flex items-center gap-2 text-sm p-3 bg-white/40 rounded border border-outline-variant/10">
+<input checked="" class="rounded-sm text-primary focus:ring-primary border-outline" type="checkbox"/>
+                                        Date Header
+                                    </label>
+<label class="flex items-center gap-2 text-sm p-3 bg-white/40 rounded border border-outline-variant/10">
+<input class="rounded-sm text-primary focus:ring-primary border-outline" type="checkbox"/>
+                                        Collaborator Notes
+                                    </label>
+<label class="flex items-center gap-2 text-sm p-3 bg-white/40 rounded border border-outline-variant/10">
+<input class="rounded-sm text-primary focus:ring-primary border-outline" type="checkbox"/>
+                                        Production Tags
+                                    </label>
+</div>
+</div>
+</div>
+</section>
+<!-- Account Section -->
+<section class="space-y-6" id="account">
+<div class="flex items-center gap-2 mb-4">
+<span class="h-[1px] flex-1 bg-outline-variant/30"></span>
+<span class="font-inter label-md uppercase tracking-widest text-slate-400">Account &amp; Billing</span>
+<span class="h-[1px] flex-1 bg-outline-variant/30"></span>
+</div>
+<div class="bg-white p-8 rounded-xl shadow-sm space-y-8">
+<div class="flex items-center gap-6">
+<div class="relative group">
+<img alt="User Avatar" class="w-20 h-20 rounded-xl object-cover shadow-md" data-alt="close-up of professional man in studio lighting for a high-end corporate headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWc_Tz1uXTLQrpixYmMsbaRTEJJwLd__wrl1sfYMbKbWQUAF8IuHlyjmIIEpw0JWiYTb6wEnbrYwDASQadwjdru_PchxpPV32qlXcgGtI4MRWaAgwNMrq80OF-QXe3jRVkzTVS_CKKlFmRHxJ2kongqqTMkI7BWZUZacj1et6SCcSJUm5r7NRLKfTYGjvtFqA8wAk1VMsQD7Ah6Lz771fiojA4mvofwQdd5dK0btKPPsRNw8eFP8wi5EtPi-MeFl1YyNQofU2VgSE"/>
+<div class="absolute inset-0 bg-primary/40 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-white" data-icon="photo_camera">photo_camera</span>
+</div>
+</div>
+<div>
+<h3 class="text-xl font-bold text-primary">Julian Thorne</h3>
+<p class="text-on-surface-variant">julian@revisionscripts.io</p>
+<button class="mt-2 text-primary font-semibold text-xs uppercase tracking-wider hover:underline">Change Profile Photo</button>
+</div>
+</div>
+<div class="p-6 bg-surface-container-low rounded-lg flex justify-between items-center border border-outline-variant/20">
+<div>
+<p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Current Plan</p>
+<h4 class="text-lg font-extrabold text-primary">Pro Editorial Annual</h4>
+<p class="text-xs text-on-surface-variant">Renews October 2024</p>
+</div>
+<button class="px-6 py-2 bg-primary-container text-white rounded-md text-sm font-bold shadow-lg hover:bg-primary transition-all">Manage Billing</button>
+</div>
+</div>
+</section>
+<!-- Footer Action Bar -->
+<div class="flex justify-end gap-4 pt-8">
+<button class="px-8 py-3 text-on-surface-variant font-bold hover:bg-surface-container transition-colors rounded-md">Discard Changes</button>
+<button class="px-8 py-3 bg-gradient-to-r from-primary-container to-primary text-white font-bold rounded-md shadow-xl hover:scale-[1.02] transition-transform">Save Preferences</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="ml-64 w-[calc(100%-16rem)] py-12 px-8 flex justify-between items-center bg-[#fbf9f6] dark:bg-[#1b1c1a] border-t border-slate-200 dark:border-slate-800/20">
+<div class="flex items-center gap-8">
+<span class="font-bold text-[#1e2a5e]">Revision Screenwriting</span>
+<span class="font-inter text-sm text-slate-500">© 2024 Revision Screenwriting. All rights reserved.</span>
+</div>
+<div class="flex gap-6">
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Resources</a>
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Documentation</a>
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Pricing</a>
+<a class="font-inter text-sm text-slate-500 hover:text-[#1e2a5e] transition-colors" href="#">Privacy</a>
+</div>
+</footer>
+</body></html>

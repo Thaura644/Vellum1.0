@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+@theme {
+  --font-manrope: "Manrope", sans-serif;
+  --font-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --font-courier: "Courier Prime", monospace;
+
+  /* Theme-aware Palette */
+  --color-vellum-primary: var(--primary);
+  --color-vellum-on-primary: var(--on-primary);
+  --color-vellum-background: var(--background);
+  --color-vellum-on-background: var(--on-background);
+  --color-vellum-surface: var(--surface);
+  --color-vellum-on-surface: var(--on-surface);
+  --color-vellum-on-surface-variant: var(--on-surface-variant);
+  --color-vellum-outline: var(--outline);
+  
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+}
+
+:root {
+  /* Light Mode (Stitch Reference) */
+  --primary: #061449;
+  --on-primary: #ffffff;
+  --background: #fbf9f6;
+  --on-background: #1b1c1a;
+  --surface: #fbf9f6;
+  --on-surface: #1b1c1a;
+  --on-surface-variant: #45464f;
+  --outline: #767680;
+  
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f5f3f0;
+  --surface-container: #efeeeb;
+  --surface-container-high: #eae8e5;
+  --surface-container-highest: #e4e2df;
+
+  --tertiary: #261600;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #3f2a09;
+  --on-tertiary-container: #b09166;
+  
+  --glass-bg: rgba(255, 255, 255, 0.4);
+}
+
+.dark {
+  /* Dark Mode (Vellum Material Dark) */
+  --primary: #adc6ff;
+  --on-primary: #002e69;
+  --background: #131314;
+  --on-background: #e5e2e3;
+  --surface: #131314;
+  --on-surface: #e5e2e3;
+  --on-surface-variant: #c2c6d4;
+  --outline: #8c919d;
+  
+  --surface-container-lowest: #0e0e0f;
+  --surface-container-low: #1b1b1c;
+  --surface-container: #1f1f20;
+  --surface-container-high: #2a2a2b;
+  --surface-container-highest: #353436;
+
+  --tertiary: #ffb691;
+  --on-tertiary: #552000;
+  --tertiary-container: #9f4300;
+  --on-tertiary-container: #ffcfb9;
+  
+  --glass-bg: rgba(19, 19, 20, 0.7);
+}
+
+body {
+  @apply bg-vellum-background text-vellum-on-surface font-jakarta antialiased transition-colors duration-300;
+}
+
+.font-headline { font-family: var(--font-manrope); }
+.font-body { font-family: var(--font-jakarta); }
+.font-label { font-family: var(--font-inter); }
+.font-mono { font-family: var(--font-courier); }
+
+.screenplay-editor {
+  @apply font-mono text-[12pt] leading-normal;
+}
+
+.ProseMirror {
+    outline: none !important;
+    @apply transition-colors duration-300;
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: var(--glass-bg);
+  @apply backdrop-blur-2xl border border-white/10;
+}
+
+.script-shadow {
+  box-shadow: 0 0 80px rgba(0,0,0,0.1);
+}
+
+.dark .script-shadow {
+  box-shadow: 0 0 80px rgba(0,0,0,0.4);
+}
+
+/* Custom Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
