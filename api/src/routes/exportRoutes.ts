@@ -3,6 +3,25 @@ import puppeteer from "puppeteer";
 
 const router = express.Router();
 
+function htmlToFountain(html: string): string {
+    let fountain = html
+        .replace(/<p class="scene-heading"[^>]*>(.*?)<\/p>/gi, '\n.$1\n')
+        .replace(/<p class="action"[^>]*>(.*?)<\/p>/gi, '\n$1\n')
+        .replace(/<p class="character"[^>]*>(.*?)<\/p>/gi, '\n@$1\n')
+        .replace(/<p class="dialogue"[^>]*>(.*?)<\/p>/gi, '\n$1\n')
+        .replace(/<p class="parenthetical"[^>]*>(.*?)<\/p>/gi, '\n($1)\n')
+        .replace(/<p class="transition"[^>]*>(.*?)<\/p>/gi, '\n>$1\n')
+        .replace(/<p class="shot"[^>]*>(.*?)<\/p>/gi, '\n.$1\n')
+        .replace(/<p class="stage-direction"[^>]*>(.*?)<\/p>/gi, '\n[$1]\n')
+        .replace(/<[^>]+>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .trim();
+    return fountain;
+}
+
 router.post("/pdf", async (req, res): Promise<any> => {
   let browser = null;
   try {
@@ -48,6 +67,8 @@ router.post("/pdf", async (req, res): Promise<any> => {
             .parenthetical { margin-left: 130pt; margin-right: 130pt; margin-top: 0; margin-bottom: 0; }
             .transition { text-transform: uppercase; text-align: right; margin-right: 0; margin-top: 16pt; margin-bottom: 12pt; }
             .shot { text-transform: uppercase; margin-top: 24pt; margin-bottom: 12pt; }
+            .outline-note { display: none !important; }
+            .stage-direction { font-style: italic; margin-top: 12pt; margin-bottom: 12pt; }
           </style>
         </head>
         <body>
@@ -78,6 +99,88 @@ router.post("/pdf", async (req, res): Promise<any> => {
   } finally {
     if (browser) await browser.close();
   }
+});
+
+router.post("/fountain", async (req, res): Promise<any> => {
+    try {
+        const { content } = req.body;
+        if (!content) {
+            return res.status(400).json({ error: "Missing document content." });
+        }
+        const fountain = htmlToFountain(content);
+        res.setHeader("Content-Disposition", "attachment; filename=\"script.fountain\"");
+        res.setHeader("Content-Type", "text/plain");
+        res.send(fountain);
+    } catch (error) {
+        console.error("Fountain Export failed:", error);
+        res.status(500).json({ error: "Failed to generate Fountain" });
+    }
+});
+
+router.post("/json", async (req, res): Promise<any> => {
+    try {
+        const { content } = req.body;
+        if (!content) {
+            return res.status(400).json({ error: "Missing document content." });
+        }
+        res.setHeader("Content-Disposition", "attachment; filename=\"script.json\"");
+        res.setHeader("Content-Type", "application/json");
+        res.json({ content, exportedAt: new Date().toISOString() });
+    } catch (error) {
+        console.error("JSON Export failed:", error);
+        res.status(500).json({ error: "Failed to export JSON" });
+    }
+});
+
+router.post("/import/fountain", async (req, res): Promise<any> => {
+    try {
+        const { content } = req.body;
+        if (!content) {
+            return res.status(400).json({ error: "Missing fountain content." });
+        }
+        
+        const lines = content.split('\n');
+        let html = '<p class="action"></p>';
+        
+        for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed) continue;
+            
+            if (trimmed.startsWith('.')) {
+                html += `<p class="scene-heading">${trimmed.substring(1).trim()}</p>`;
+            } else if (trimmed.startsWith('@')) {
+                html += `<p class="character">${trimmed.substring(1).trim()}</p>`;
+            } else if (trimmed.startsWith('>')) {
+                html += `<p class="transition">${trimmed.substring(1).trim()}</p>`;
+            } else if (trimmed.startsWith('(') && trimmed.endsWith(')')) {
+                html += `<p class="parenthetical">${trimmed}</p>`;
+            } else if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+                html += `<p class="stage-direction">${trimmed.slice(1, -1)}</p>`;
+            } else {
+                html += `<p class="action">${trimmed}</p>`;
+            }
+        }
+        
+        res.json({ html, success: true });
+    } catch (error) {
+        console.error("Fountain Import failed:", error);
+        res.status(500).json({ error: "Failed to import Fountain" });
+    }
+});
+
+router.post("/import/json", async (req, res): Promise<any> => {
+    try {
+        const { content } = req.body;
+        if (!content) {
+            return res.status(400).json({ error: "Missing JSON content." });
+        }
+        
+        const parsed = typeof content === 'string' ? JSON.parse(content) : content;
+        res.json({ html: parsed.content || '', success: true });
+    } catch (error) {
+        console.error("JSON Import failed:", error);
+        res.status(500).json({ error: "Failed to import JSON" });
+    }
 });
 
 export default router;

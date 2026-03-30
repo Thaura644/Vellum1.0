@@ -118,3 +118,35 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Comment Highlight */
+.comment-highlight {
+  background-color: rgba(255, 235, 59, 0.3);
+  border-bottom: 2px solid #f59e0b;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0 2px;
+  transition: background-color 0.2s;
+}
+
+.comment-highlight:hover {
+  background-color: rgba(255, 235, 59, 0.5);
+}
+
+.dark .comment-highlight {
+  background-color: rgba(251, 191, 36, 0.2);
+  border-bottom-color: #f59e0b;
+}
+
+.dark .comment-highlight:hover {
+  background-color: rgba(251, 191, 36, 0.4);
+}
+
+/* Outline Note (hidden in PDF) */
+.outline-note {
+  background-color: rgba(99, 102, 241, 0.1);
+  border-left: 3px solid #6366f1;
+  padding-left: 8px;
+  font-style: italic;
+  color: #6366f1;
+}

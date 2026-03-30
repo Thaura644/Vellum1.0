@@ -9,6 +9,13 @@ dotenv.config();
 import exportRoutes from "./routes/exportRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
+import characterRoutes from "./routes/characterRoutes.js";
+import locationRoutes from "./routes/locationRoutes.js";
+import noteRoutes from "./routes/noteRoutes.js";
+import libraryRoutes from "./routes/libraryRoutes.js";
+import communityRoutes from "./routes/communityRoutes.js";
+import actRoutes from "./routes/actRoutes.js";
+import manuscriptRoutes from "./routes/manuscriptRoutes.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -24,6 +31,13 @@ app.get("/health", (req, res) => {
 app.use("/api/export", exportRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/characters", characterRoutes);
+app.use("/api/locations", locationRoutes);
+app.use("/api/notes", noteRoutes);
+app.use("/api/library", libraryRoutes);
+app.use("/api/community", communityRoutes);
+app.use("/api/acts", actRoutes);
+app.use("/api/manuscripts", manuscriptRoutes);
 
 import { WebSocketServer } from "ws";
 

@@ -9,7 +9,7 @@ import { useAuthStore } from "../store/useAuthStore";
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState<"scripts" | "library" | "community" | "dashboard">("scripts");
-  const [activeModal, setActiveModal] = useState<"newProject" | "settings" | "profile" | "notifications" | "archive" | "history" | null>(null);
+  const [activeModal, setActiveModal] = useState<"newProject" | "settings" | "profile" | "notifications" | "archive" | "history" | "newAsset" | "shareProject" | null>(null);
   
   // New Project Wizard State
   const [newTitle, setNewTitle] = useState("");
@@ -32,6 +32,27 @@ const Dashboard = () => {
   const [scripts, setScripts] = useState<any[]>([]);
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  
+  // Library State
+  const [libraryAssets, setLibraryAssets] = useState<any[]>([]);
+  const [libraryCategory, setLibraryCategory] = useState<string>("all");
+  
+  // Community State
+  const [communityProjects, setCommunityProjects] = useState<any[]>([]);
+  const [sharedProjects, setSharedProjects] = useState<any[]>([]);
+  
+  // New Asset Form State
+  const [assetName, setAssetName] = useState("");
+  const [assetCategory, setAssetCategory] = useState("character_template");
+  const [assetDescription, setAssetDescription] = useState("");
+  const [assetContent, setAssetContent] = useState("");
+  
+  // Share Project Form State
+  const [shareTitle, setShareTitle] = useState("");
+  const [shareExcerpt, setShareExcerpt] = useState("");
+  const [shareType, setShareType] = useState("Feature");
+  const [shareIsPublic, setShareIsPublic] = useState(false);
+  const [shareProjectId, setShareProjectId] = useState("");
 
   const totalWords = scripts.reduce((acc, s) => acc + (s.words || 0), 0);
   const dailyGoal = profile?.goal || 2000;
@@ -42,6 +63,14 @@ const Dashboard = () => {
   // Natively compute velocity against the user's real total words for today
   const todaysVelocity = Math.min(100, Math.floor((totalWords / Math.max(1, dailyGoal)) * 100));
   const velocityData = [0, 0, 0, 0, 0, 0, todaysVelocity];
+
+  useEffect(() => {
+    if (activeModal === "newProject") {
+      setNewTitle("");
+      setNewType("Feature");
+      setNewExcerpt("");
+    }
+  }, [activeModal]);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -81,6 +110,54 @@ const Dashboard = () => {
     fetchProfile();
     fetchProjects();
   }, []);
+
+  useEffect(() => {
+    if (currentView !== "library") return;
+    const fetchLibrary = async () => {
+      try {
+        const token = useAuthStore.getState().token;
+        const url = libraryCategory === "all" 
+          ? "http://localhost:3001/api/library"
+          : `http://localhost:3001/api/library?category=${libraryCategory}`;
+        const res = await fetch(url, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setLibraryAssets(data);
+        }
+      } catch (err) {
+        console.error("Failed to load library", err);
+      }
+    };
+    fetchLibrary();
+  }, [currentView, libraryCategory]);
+
+  useEffect(() => {
+    if (currentView !== "community") return;
+    const fetchCommunity = async () => {
+      try {
+        const token = useAuthStore.getState().token;
+        const [sharedRes, publicRes] = await Promise.all([
+          fetch("http://localhost:3001/api/community/shared", {
+            headers: { Authorization: `Bearer ${token}` }
+          }),
+          fetch("http://localhost:3001/api/community/public")
+        ]);
+        if (sharedRes.ok) {
+          const sharedData = await sharedRes.json();
+          setSharedProjects(sharedData);
+        }
+        if (publicRes.ok) {
+          const publicData = await publicRes.json();
+          setCommunityProjects(publicData);
+        }
+      } catch (err) {
+        console.error("Failed to load community", err);
+      }
+    };
+    fetchCommunity();
+  }, [currentView]);
 
   const updateProfile = async () => {
       try {
@@ -294,16 +371,118 @@ const Dashboard = () => {
           </div>
         </div>
         ) : currentView === "library" ? (
-          <div className="flex flex-col items-center justify-center h-96 text-center border-2 border-dashed border-vellum-outline/10 rounded-3xl">
-             <Archive size={48} className="text-vellum-on-surface-variant opacity-50 mb-6" />
-             <h2 className="font-headline text-2xl font-bold mb-2">Personal Library</h2>
-             <p className="text-vellum-on-surface-variant max-w-sm">Your imported assets, character templates, and saved locations will appear here.</p>
+          <div className="space-y-8">
+            <div className="flex items-center justify-between">
+              <h2 className="font-headline text-2xl font-bold">Personal Library</h2>
+              <button onClick={() => setActiveModal("newAsset")} className="flex items-center gap-2 bg-vellum-primary text-on-primary px-6 py-3 rounded-full font-label font-bold text-xs uppercase tracking-widest hover:brightness-110">
+                <Plus size={16} /> Add Asset
+              </button>
+            </div>
+            <div className="flex gap-3 flex-wrap">
+              {["all", "character_template", "location_template", "beat_sheet", "outline", "reference"].map(cat => (
+                <button key={cat} onClick={() => setLibraryCategory(cat)} className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-colors ${libraryCategory === cat ? 'bg-vellum-primary text-on-primary' : 'bg-surface-container-high text-vellum-on-surface-variant hover:bg-surface-container-highest'}`}>
+                  {cat.replace("_", " ")}
+                </button>
+              ))}
+            </div>
+            {libraryAssets.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-64 text-center border-2 border-dashed border-vellum-outline/10 rounded-3xl">
+                <Archive size={48} className="text-vellum-on-surface-variant opacity-50 mb-6" />
+                <p className="text-vellum-on-surface-variant max-w-sm">No assets yet. Add character templates, location templates, beat sheets, and more.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {libraryAssets.map(asset => (
+                  <div key={asset.id} className="bg-surface-container-low p-6 rounded-2xl border border-vellum-outline/10 hover:border-vellum-primary/20 transition-colors">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                        asset.category === "character_template" ? "bg-blue-500/10 text-blue-500" :
+                        asset.category === "location_template" ? "bg-green-500/10 text-green-500" :
+                        asset.category === "beat_sheet" ? "bg-purple-500/10 text-purple-500" :
+                        "bg-orange-500/10 text-orange-500"
+                      }`}>
+                        <FileText size={18} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-bold text-vellum-on-surface">{asset.name}</h3>
+                        <p className="text-[10px] text-vellum-on-surface-variant uppercase tracking-widest">{asset.category?.replace("_", " ")}</p>
+                      </div>
+                    </div>
+                    {asset.description && <p className="text-sm text-vellum-on-surface-variant mb-4">{asset.description}</p>}
+                    <p className="text-[10px] text-vellum-on-surface-variant">Added {formatDistanceToNow(new Date(asset.createdAt), { addSuffix: true })}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-96 text-center border-2 border-dashed border-vellum-outline/10 rounded-3xl">
-             <PlusCircle size={48} className="text-vellum-primary opacity-50 mb-6" />
-             <h2 className="font-headline text-2xl font-bold mb-2">Community Connect</h2>
-             <p className="text-vellum-on-surface-variant max-w-sm">Collaborate with other writers, find coverage, and share feedback on your manuscripts.</p>
+          <div className="space-y-10">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-headline text-2xl font-bold">Community Connect</h2>
+                <p className="text-vellum-on-surface-variant">Discover scripts, collaborate, and get feedback</p>
+              </div>
+              <button onClick={() => setActiveModal("shareProject")} className="flex items-center gap-2 bg-vellum-primary text-on-primary px-6 py-3 rounded-full font-label font-bold text-xs uppercase tracking-widest hover:brightness-110">
+                <Plus size={16} /> Share Script
+              </button>
+            </div>
+            
+            {sharedProjects.length > 0 && (
+              <div>
+                <h3 className="font-headline text-lg font-bold mb-4">Your Shared Scripts</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {sharedProjects.map(project => (
+                    <div key={project.id} className="bg-surface-container-low p-6 rounded-2xl border border-vellum-primary/20">
+                      <div className="flex justify-between items-start mb-3">
+                        <h4 className="font-bold text-lg">{project.title}</h4>
+                        <span className={`text-[10px] px-2 py-1 rounded-full ${project.isPublic ? "bg-green-500/20 text-green-500" : "bg-gray-500/20 text-gray-500"}`}>
+                          {project.isPublic ? "Public" : "Private"}
+                        </span>
+                      </div>
+                      <p className="text-sm text-vellum-on-surface-variant mb-4">{project.excerpt}</p>
+                      <div className="flex items-center gap-2 text-xs text-vellum-on-surface-variant">
+                        <div className="w-6 h-6 rounded-full bg-vellum-primary/20 flex items-center justify-center text-[10px] font-bold" style={{ backgroundColor: project.owner?.color + "20" }}>
+                          {project.owner?.name?.charAt(0)}
+                        </div>
+                        <span>{project.owner?.name}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            <div>
+              <h3 className="font-headline text-lg font-bold mb-4">Discover Scripts</h3>
+              {communityProjects.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-48 text-center border-2 border-dashed border-vellum-outline/10 rounded-3xl">
+                  <PlusCircle size={48} className="text-vellum-primary opacity-50 mb-6" />
+                  <p className="text-vellum-on-surface-variant max-w-sm">No public scripts available yet. Be the first to share!</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {communityProjects.map(project => (
+                    <div key={project.id} className="bg-surface-container-low p-6 rounded-2xl border border-vellum-outline/10 hover:border-vellum-primary/20 transition-colors">
+                      <div className="flex justify-between items-start mb-3">
+                        <span className="bg-vellum-primary/10 text-vellum-primary text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-widest">{project.type}</span>
+                        <span className="text-[10px] text-vellum-on-surface-variant">{formatDistanceToNow(new Date(project.updatedAt), { addSuffix: true })}</span>
+                      </div>
+                      <h4 className="font-headline font-bold text-xl mb-2">{project.title}</h4>
+                      <p className="text-sm text-vellum-on-surface-variant mb-4 line-clamp-2">{project.excerpt}</p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold" style={{ backgroundColor: project.owner?.color + "20", color: project.owner?.color }}>
+                            {project.owner?.name?.charAt(0)}
+                          </div>
+                          <span className="text-xs font-medium">{project.owner?.name}</span>
+                        </div>
+                        <button className="text-xs font-bold text-vellum-primary uppercase tracking-widest hover:underline">View</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </main>
@@ -343,25 +522,29 @@ const Dashboard = () => {
                 >
                     <X size={20} />
                 </button>
-                <div className="mb-8">
-                   <h2 className="font-headline text-2xl font-bold uppercase tracking-wide">
-                      {activeModal === "newProject" && "New Project"}
-                      {activeModal === "settings" && "Preferences"}
-                      {activeModal === "profile" && "Writer Profile"}
-                      {activeModal === "notifications" && "Alerts"}
-                      {activeModal === "archive" && "Vault"}
-                      {activeModal === "history" && "Activity Log"}
-                   </h2>
-                </div>
-                <div className="flex flex-col gap-4">
-                   <p className="text-vellum-on-surface-variant text-sm">
-                      {activeModal === "newProject" && "Define the architecture of your next great narrative below to properly initialize your environment."}
-                      {activeModal === "settings" && "Configure application theme, PDF export defaults, and cloud synching settings."}
-                      {activeModal === "profile" && "Update your pen name, email address, and WGA registry information."}
-                      {activeModal === "notifications" && "You have 2 new comments on 'Quiet Hours' from your co-writer."}
-                      {activeModal === "archive" && "Here you can find all projects you've marked as archived or moved to the vault."}
-                      {activeModal === "history" && "Detailed breakdown of all edits, saves, and character adjustments over the past 30 days."}
-                   </p>
+                 <div className="mb-8">
+                    <h2 className="font-headline text-2xl font-bold uppercase tracking-wide">
+                       {activeModal === "newProject" && "New Project"}
+                       {activeModal === "settings" && "Preferences"}
+                       {activeModal === "profile" && "Writer Profile"}
+                       {activeModal === "notifications" && "Alerts"}
+                       {activeModal === "archive" && "Vault"}
+                       {activeModal === "history" && "Activity Log"}
+                       {activeModal === "newAsset" && "Add Library Asset"}
+                       {activeModal === "shareProject" && "Share Script"}
+                    </h2>
+                 </div>
+                 <div className="flex flex-col gap-4">
+                    <p className="text-vellum-on-surface-variant text-sm">
+                       {activeModal === "newProject" && "Define the architecture of your next great narrative below to properly initialize your environment."}
+                       {activeModal === "settings" && "Configure application theme, PDF export defaults, and cloud synching settings."}
+                       {activeModal === "profile" && "Update your pen name, email address, and WGA registry information."}
+                       {activeModal === "notifications" && "You have 2 new comments on 'Quiet Hours' from your co-writer."}
+                       {activeModal === "archive" && "Here you can find all projects you've marked as archived or moved to the vault."}
+                       {activeModal === "history" && "Detailed breakdown of all edits, saves, and character adjustments over the past 30 days."}
+                       {activeModal === "newAsset" && "Add templates and assets to your personal library."}
+                       {activeModal === "shareProject" && "Share your script with the community or collaborate with specific writers."}
+                    </p>
                    {activeModal === "newProject" && (
                        <div className="space-y-4 mt-4 text-left">
                            <div>
@@ -381,12 +564,108 @@ const Dashboard = () => {
                                <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Logline / Notes</label>
                                <input value={newExcerpt} onChange={e => setNewExcerpt(e.target.value)} type="text" placeholder="A brief summary..." className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface" />
                            </div>
-                           <button onClick={createNewProject} className="w-full mt-4 bg-vellum-primary text-on-primary font-bold uppercase py-3 rounded-xl tracking-widest text-xs hover:brightness-110 shadow-lg">
-                               Initialize Script
-                           </button>
-                       </div>
-                   )}
-                </div>
+                            <button onClick={createNewProject} className="w-full mt-4 bg-vellum-primary text-on-primary font-bold uppercase py-3 rounded-xl tracking-widest text-xs hover:brightness-110 shadow-lg">
+                                Initialize Script
+                            </button>
+                        </div>
+                    )}
+                    {activeModal === "newAsset" && (
+                        <div className="space-y-4 mt-4 text-left">
+                            <div>
+                                <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Asset Name</label>
+                                <input value={assetName} onChange={e => setAssetName(e.target.value)} type="text" placeholder="e.g. Character Bio Template" className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface" />
+                            </div>
+                            <div>
+                                <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Category</label>
+                                <select value={assetCategory} onChange={e => setAssetCategory(e.target.value)} className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface">
+                                    <option value="character_template">Character Template</option>
+                                    <option value="location_template">Location Template</option>
+                                    <option value="beat_sheet">Beat Sheet</option>
+                                    <option value="outline">Outline</option>
+                                    <option value="reference">Reference</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Description</label>
+                                <input value={assetDescription} onChange={e => setAssetDescription(e.target.value)} type="text" placeholder="Brief description..." className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface" />
+                            </div>
+                            <div>
+                                <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Content (Optional)</label>
+                                <textarea value={assetContent} onChange={e => setAssetContent(e.target.value)} placeholder="Template content or notes..." className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface h-24 resize-none" />
+                            </div>
+                            <button onClick={async () => {
+                                try {
+                                    const token = useAuthStore.getState().token;
+                                    await fetch("http://localhost:3001/api/library", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                                        body: JSON.stringify({ name: assetName, category: assetCategory, description: assetDescription, content: assetContent })
+                                    });
+                                    setActiveModal(null);
+                                    setAssetName(""); setAssetCategory("character_template"); setAssetDescription(""); setAssetContent("");
+                                    window.location.reload();
+                                } catch (err) {
+                                    console.error("Failed to create asset", err);
+                                }
+                            }} className="w-full mt-4 bg-vellum-primary text-on-primary font-bold uppercase py-3 rounded-xl tracking-widest text-xs hover:brightness-110 shadow-lg">
+                                Add to Library
+                            </button>
+                        </div>
+                    )}
+                    {activeModal === "shareProject" && (
+                        <div className="space-y-4 mt-4 text-left">
+                            <div>
+                                <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Project to Share</label>
+                                <select value={shareProjectId} onChange={e => {
+                                    setShareProjectId(e.target.value);
+                                    const proj = scripts.find(s => s.id === e.target.value);
+                                    if (proj) { setShareTitle(proj.title); setShareExcerpt(proj.excerpt); setShareType(proj.type); }
+                                }} className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface">
+                                    <option value="">Select a project...</option>
+                                    {scripts.map(s => <option key={s.id} value={s.id}>{s.title}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Title</label>
+                                <input value={shareTitle} onChange={e => setShareTitle(e.target.value)} type="text" placeholder="Public title" className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface" />
+                            </div>
+                            <div>
+                                <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Logline</label>
+                                <input value={shareExcerpt} onChange={e => setShareExcerpt(e.target.value)} type="text" placeholder="Brief summary..." className="w-full bg-surface-container rounded-xl px-4 py-3 mt-1 text-sm outline-none focus:ring-1 focus:ring-vellum-primary/50 text-vellum-on-surface" />
+                            </div>
+                            <div>
+                                <label className="text-[10px] font-bold text-vellum-on-surface-variant uppercase tracking-widest">Visibility</label>
+                                <div className="flex gap-4 mt-2">
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" checked={shareIsPublic} onChange={() => setShareIsPublic(true)} className="accent-vellum-primary" />
+                                        <span className="text-sm">Public</span>
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" checked={!shareIsPublic} onChange={() => setShareIsPublic(false)} className="accent-vellum-primary" />
+                                        <span className="text-sm">Private (invite only)</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button onClick={async () => {
+                                try {
+                                    const token = useAuthStore.getState().token;
+                                    await fetch("http://localhost:3001/api/community/share", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                                        body: JSON.stringify({ title: shareTitle, excerpt: shareExcerpt, type: shareType, projectId: shareProjectId, isPublic: shareIsPublic })
+                                    });
+                                    setActiveModal(null);
+                                    setShareTitle(""); setShareExcerpt(""); setShareType("Feature"); setShareIsPublic(false); setShareProjectId("");
+                                    window.location.reload();
+                                } catch (err) {
+                                    console.error("Failed to share project", err);
+                                }
+                            }} className="w-full mt-4 bg-vellum-primary text-on-primary font-bold uppercase py-3 rounded-xl tracking-widest text-xs hover:brightness-110 shadow-lg">
+                                Share Script
+                            </button>
+                        </div>
+                    )}
+                 </div>
              </motion.div>
           </motion.div>
         )}

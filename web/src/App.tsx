@@ -6,6 +6,7 @@ import Editor from "./editor/Editor";
 import BeatBoard from "./pages/BeatBoard";
 import CharacterGallery from "./pages/CharacterGallery";
 import WorldEngine from "./pages/WorldEngine";
+import ActsPage from "./pages/ActsPage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -37,6 +38,7 @@ function App() {
         <Route path="/beat-board" element={<ProtectedRoute><BeatBoard /></ProtectedRoute>} />
         <Route path="/characters" element={<ProtectedRoute><CharacterGallery /></ProtectedRoute>} />
         <Route path="/world" element={<ProtectedRoute><WorldEngine /></ProtectedRoute>} />
+        <Route path="/acts" element={<ProtectedRoute><ActsPage /></ProtectedRoute>} />
       </Routes>
     </Router>
   );

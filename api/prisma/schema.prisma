@@ -20,6 +20,37 @@ model Project {
   updatedAt DateTime @updatedAt
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  characters Character[]
+  locations Location[]
+  notes     Note[]
+  acts      Act[]
+  manuscripts Manuscript[]
+}
+
+model Act {
+  id          String   @id @default(cuid())
+  title       String   @default("Act")
+  order       Int      @default(0)
+  summary     String?
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes       Note[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Manuscript {
+  id          String   @id @default(cuid())
+  title       String   @default("Untitled Manuscript")
+  order       Int      @default(0)
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model User {
@@ -30,5 +61,98 @@ model User {
   color     String   @default("#ffb612")
   goal      Int      @default(2000)
   createdAt DateTime @default(now())
-  projects  Project[]
+  projects      Project[]
+  manuscripts Manuscript[]
+  characters   Character[]
+  locations    Location[]
+  notes       Note[]
+  acts       Act[]
+  sharedProjects SharedProject[]
+  comments    Comment[]
+  assets     Asset[]
+}
+
+model Character {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  notes       String?
+  color       String   @default("#ffb612")
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Location {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  notes       String?
+  intExt      String   @default("INT") // INT, EXT, INT/EXT
+  timeOfDay   String   @default("DAY") // DAY, NIGHT, DAWN, DUSK
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  content   String
+  isPrivate Boolean  @default(false) // Private pad vs project notes
+  sceneHeading String?
+  act       Int      @default(1) // Act number for beat board (1, 2, or 3)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  actId     String?
+  actRelation     Act?     @relation(fields: [actId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SharedProject {
+  id          String   @id @default(cuid())
+  title       String
+  excerpt     String?
+  type        String   @default("Feature")
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  isPublic    Boolean  @default(false)
+  collaborators String?  // JSON string of collaborator emails
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Comment {
+  id          String   @id @default(cuid())
+  content     String
+  projectId   String?
+  sharedProjectId String?
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  sceneHeading String?
+  position    Int?     // Character position in script for anchoring
+  resolved    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Asset {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   // template, reference, image, document
+  category    String   // character_template, location_template, beat_sheet, outline, etc
+  description String?
+  content     String?  // For text-based assets
+  fileUrl     String?  // For file-based assets
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
